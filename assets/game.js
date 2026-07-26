@@ -64,14 +64,22 @@ function skyTexture() {
   return new THREE.CanvasTexture(c);
 }
 function roadTexture() {
+  // railway ballast (gravel) with wooden sleepers/ties across the track
   const c = document.createElement('canvas'); c.width = 256; c.height = 256;
   const x = c.getContext('2d');
-  x.fillStyle = '#33343a'; x.fillRect(0, 0, 256, 256);
-  // asphalt noise
-  for (let i = 0; i < 1400; i++) { x.fillStyle = `rgba(${20 + Math.random() * 40|0},${20 + Math.random() * 40|0},${24 + Math.random() * 40|0},0.5)`; x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
-  // dashed lane lines at the two inner lane boundaries (u ~ 0.363 & 0.637 across an 8-wide road)
-  x.fillStyle = '#e9e4c8';
-  [0.363, 0.637].forEach(u => { for (let y = 0; y < 256; y += 46) x.fillRect(u * 256 - 3, y, 6, 26); });
+  x.fillStyle = '#5a5148'; x.fillRect(0, 0, 256, 256);
+  // gravel noise
+  for (let i = 0; i < 2200; i++) {
+    const v = 60 + Math.random() * 70 | 0;
+    x.fillStyle = `rgba(${v},${v - 8},${v - 18},0.5)`;
+    x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+  }
+  // sleepers (ties)
+  for (let y = 0; y < 256; y += 40) {
+    x.fillStyle = '#3f2f21'; x.fillRect(0, y, 256, 22);
+    x.fillStyle = 'rgba(120,92,64,0.45)'; x.fillRect(0, y, 256, 4);
+    x.fillStyle = 'rgba(0,0,0,0.25)'; x.fillRect(0, y + 19, 256, 3);
+  }
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }
@@ -115,18 +123,25 @@ function buildScene() {
   const sun = new THREE.DirectionalLight(0xfff3d6, 1.5);
   sun.position.set(8, 18, 6); scene.add(sun);
 
-  // road
-  roadMat = new THREE.MeshStandardMaterial({ map: roadTexture(), roughness: 0.95, metalness: 0 });
-  roadMat.map.repeat.set(1, 60);
+  // track ballast
+  roadMat = new THREE.MeshStandardMaterial({ map: roadTexture(), roughness: 1.0, metalness: 0 });
+  roadMat.map.repeat.set(1, 72);
   const road = new THREE.Mesh(new THREE.PlaneGeometry(8, 500), roadMat);
   road.rotation.x = -Math.PI / 2; road.position.z = -180; scene.add(road);
 
-  // sidewalks + curbs
+  // steel rails — two per lane
+  const railMat = mat(0xcdd4db, 0.35, 0.9);
+  const railGeo = new THREE.BoxGeometry(0.1, 0.14, 500);
+  LANES.forEach(lx => [-0.68, 0.68].forEach(off => {
+    const r = new THREE.Mesh(railGeo, railMat); r.position.set(lx + off, 0.11, -180); scene.add(r);
+  }));
+
+  // raised side platforms with yellow safety edge
   [-1, 1].forEach(s => {
-    const walk = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 500), mat(0x8d8f93, 0.98));
-    walk.rotation.x = -Math.PI / 2; walk.position.set(s * 6.2, 0.06, -180); scene.add(walk);
-    const curb = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.22, 500), mat(0xb8b9bc, 0.9));
-    curb.position.set(s * 4.15, 0.11, -180); scene.add(curb);
+    const plat = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.5, 500), mat(0x9a9ca1, 0.95));
+    plat.position.set(s * 6.3, 0.05, -180); scene.add(plat);
+    const edge = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.54, 500), mat(0xf2c14e, 0.7));
+    edge.position.set(s * 4.22, 0.08, -180); scene.add(edge);
   });
 
   scene.add(world);
@@ -246,17 +261,54 @@ function makeCar(color) {
   return g;
 }
 const CAR_COLORS = [0xb23b3b, 0x2f5fa0, 0x2d2d33, 0xd9b23a, 0xf2f2f2, 0x3a7d4f];
+const TRAIN_COLORS = [0xf2c14e, 0xd13a29, 0x2f7fc4, 0x2e9e5b, 0xe6e8ea, 0xe87b1f];
+
+/* a subway/metro train car */
+function makeTrainCar(color) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.6, 3.5), mat(color, 0.5, 0.3)); body.position.y = 1.05; g.add(body);
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.28, 3.5), mat(0xdfe3e6, 0.6, 0.2)); roof.position.y = 1.94; g.add(roof);
+  const band = new THREE.Mesh(new THREE.BoxGeometry(1.84, 0.5, 3.02), mat(0x1b2a33, 0.2, 0.7)); band.position.y = 1.36; g.add(band);
+  const stripe = new THREE.Mesh(new THREE.BoxGeometry(1.86, 0.16, 3.5), mat(0x20242c, 0.5)); stripe.position.y = 0.7; g.add(stripe);
+  // doors
+  [-0.9, 0.9].forEach(z => { const d = new THREE.Mesh(new THREE.BoxGeometry(1.86, 1.0, 0.06), mat(0x20242c, 0.6)); d.position.set(0, 1.0, z); g.add(d); });
+  // headlights on the near end
+  const lm = new THREE.MeshStandardMaterial({ color: 0xfff2c0, emissive: 0xfff2c0, emissiveIntensity: 0.55 });
+  [[-0.5, 0.6, 1.77], [0.5, 0.6, 1.77]].forEach(p => { const l = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.2, 0.05), lm); l.position.set(p[0], p[1], p[2]); g.add(l); });
+  g.userData.low = false; return g;
+}
+
+/* trackside signal + junction box */
+function makeSignalBox() {
+  const g = new THREE.Group();
+  const box = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.4, 0.9), mat(0x59636f, 0.85)); box.position.y = 0.7; g.add(box);
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.6, 8), mat(0x2f333a, 0.6, 0.4)); pole.position.set(0.42, 1.3, 0); g.add(pole);
+  const rMat = new THREE.MeshStandardMaterial({ color: 0xff3b30, emissive: 0xff3b30, emissiveIntensity: 0.6 });
+  const gMat = new THREE.MeshStandardMaterial({ color: 0x2ecc71, emissive: 0x2ecc71, emissiveIntensity: 0.25 });
+  const r = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), rMat); r.position.set(0.42, 2.45, 0.14); g.add(r);
+  const gr = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), gMat); gr.position.set(0.42, 2.12, 0.14); g.add(gr);
+  g.userData.low = false; return g;
+}
+
+/* overhead line (catenary) pole */
+function makeCatenary() {
+  const g = new THREE.Group();
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.15, 6.2, 8), mat(0x6b6f76, 0.6, 0.4)); pole.position.y = 3.1; g.add(pole);
+  const arm = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.13, 0.13), mat(0x6b6f76, 0.6, 0.4)); arm.position.set(-1.5, 5.7, 0); g.add(arm);
+  const base = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.3, 0.4), mat(0x40444a, 0.8)); base.position.y = 0.15; g.add(base);
+  return g;
+}
+
 function buildProps() {
-  const spacing = 10;
+  const spacing = 12;
   for (let s = -1; s <= 1; s += 2) {
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 10; i++) {
       const roll = Math.random();
-      let p;
-      if (roll < 0.4) p = makeLamp();
-      else if (roll < 0.72) p = makeTree();
-      else p = makeCar(CAR_COLORS[(Math.random() * CAR_COLORS.length) | 0]);
-      p.position.set(s * (5.3 + Math.random() * 0.6), 0, RECYCLE_Z - i * spacing - (s < 0 ? 0 : 5));
-      if (p.children.length && p.geometry === undefined) p.rotation.y = s < 0 ? 0.1 : -0.1;
+      let p, y = 0.3;
+      if (roll < 0.5) { p = makeCatenary(); p.rotation.y = s < 0 ? 0 : Math.PI; y = 0.3; }
+      else if (roll < 0.82) { p = makeTrainCar(TRAIN_COLORS[(Math.random() * TRAIN_COLORS.length) | 0]); p.scale.set(0.95, 0.95, 1.5); }
+      else { p = makeSignalBox(); p.rotation.y = s < 0 ? -0.3 : 0.3; }
+      p.position.set(s * (5.7 + Math.random() * 0.7), y, RECYCLE_Z - i * spacing - (s < 0 ? 0 : 6));
       p.userData.span = 120;
       props.push(p); world.add(p);
     }
@@ -299,13 +351,12 @@ function makeCrates() {
 function newObstacle() {
   const rig = new THREE.Group();
   const kinds = {
+    train: makeTrainCar(TRAIN_COLORS[(Math.random() * TRAIN_COLORS.length) | 0]),
     barrier: makeBarrier(),
-    dumpster: makeDumpster(),
-    car: makeCar(CAR_COLORS[(Math.random() * CAR_COLORS.length) | 0]),
+    signal: makeSignalBox(),
     cones: makeCones(),
     crates: makeCrates()
   };
-  kinds.car.userData.low = false;
   Object.values(kinds).forEach(k => { k.visible = false; rig.add(k); });
   rig.userData.kinds = kinds; rig.userData.active = false; rig.visible = false;
   obstacles.push(rig); scene.add(rig);
@@ -321,7 +372,7 @@ function newCoin() {
 }
 function getFreeCoin() { for (const c of coins) if (!c.userData.active) return c; return newCoin(); }
 
-const KIND_KEYS = ['barrier', 'dumpster', 'car', 'cones', 'crates'];
+const KIND_KEYS = ['train', 'barrier', 'signal', 'cones', 'crates'];
 function placeObstacle(lane) {
   const rig = getFreeObstacle();
   const key = KIND_KEYS[(Math.random() * KIND_KEYS.length) | 0];
