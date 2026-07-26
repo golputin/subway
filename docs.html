@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Subway Hood — Docs</title>
+<meta name="description" content="Subway Hood documentation: how to play, Practice vs Compete, $HOOD on the Pons Launchpad, prize pool & basis-point rewards, leaderboard & anti-cheat."/>
+<link rel="icon" href="assets/badge.jpg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css"/>
+<style>
+  .docs-wrap{display:grid;grid-template-columns:250px 1fr;gap:44px;padding:38px 0 60px;align-items:start}
+  .docs-side{position:sticky;top:92px;display:flex;flex-direction:column;gap:4px;
+    border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.02)}
+  .docs-side .lbl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:8px 12px 4px;font-weight:800}
+  .docs-side a{display:block;padding:9px 12px;border-radius:9px;color:var(--muted);font-weight:600;font-size:14px;transition:.15s}
+  .docs-side a:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+  .docs-side a.active{color:var(--ink);background:linear-gradient(90deg,rgba(245,179,49,.18),transparent);border-left:2px solid var(--gold)}
+  .docs-main{min-width:0}
+  .docs-main .lead{color:var(--muted);font-size:17px;line-height:1.7;margin:0 0 8px}
+  .docs-main section{scroll-margin-top:92px;padding:22px 0;border-top:1px solid var(--line)}
+  .docs-main section:first-of-type{border-top:0}
+  .docs-main h1{font-family:"Anton",sans-serif;font-weight:400;font-size:clamp(34px,5vw,54px);margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px}
+  .docs-main h2{font-family:"Anton",sans-serif;font-weight:400;font-size:26px;margin:4px 0 14px;text-transform:uppercase;letter-spacing:.5px}
+  .docs-main h3{font-size:16px;margin:18px 0 6px}
+  .docs-main p{color:var(--muted);line-height:1.7;margin:0 0 12px}
+  .docs-main ul,.docs-main ol{color:var(--muted);line-height:1.8;margin:0 0 12px;padding-left:22px}
+  .docs-main b{color:var(--ink)}
+  .docs-main code{background:rgba(255,255,255,.06);color:var(--gold2);padding:2px 7px;border-radius:6px;font-size:13px}
+  .docs-main pre{background:#0c0f16;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto;margin:0 0 14px}
+  .docs-main pre code{background:none;color:#cfe0ff;padding:0}
+  .callout{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 16px;margin:0 0 14px;background:rgba(245,179,49,.06)}
+  .callout.warn{border-left-color:var(--red);background:rgba(224,64,46,.06)}
+  .kv{width:100%;border-collapse:collapse;margin:0 0 14px}
+  .kv td{border-bottom:1px solid var(--line);padding:10px 12px;font-size:14px;color:var(--muted);vertical-align:top}
+  .kv td:first-child{color:var(--ink);font-weight:700;white-space:nowrap;width:200px}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid var(--line)}
+  .pill.live{color:var(--green);border-color:rgba(55,214,122,.5);background:rgba(55,214,122,.12)}
+  .pill.soon{color:var(--gold2);border-color:rgba(245,179,49,.5);background:rgba(245,179,49,.12)}
+  @media(max-width:860px){ .docs-wrap{grid-template-columns:1fr} .docs-side{position:static;flex-direction:row;flex-wrap:wrap} .docs-side .lbl{display:none} }
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<nav class="nav">
+  <div class="container inner">
+    <a class="brand" href="index.html">
+      <img src="assets/badge.jpg" alt="Subway Hood"/>
+      <b>Subway Hood</b>
+    </a>
+    <div class="links">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#token">Launch</a>
+      <a href="index.html#leaderboard">Leaderboard</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <a href="game.html" class="btn btn-primary btn-sm" style="margin-left:12px">▶ Play</a>
+  </div>
+</nav>
+
+<div class="container docs-wrap">
+  <aside class="docs-side">
+    <span class="lbl">Documentation</span>
+    <a href="#intro">Introduction</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#gameplay">Gameplay & controls</a>
+    <a href="#modes">Modes & eligibility</a>
+    <a href="#token">$HOOD & Pons launch</a>
+    <a href="#rewards">Prize pool & rewards</a>
+    <a href="#leaderboard">Leaderboard & anti-cheat</a>
+    <a href="#treasury">Treasury & payouts</a>
+    <a href="#faq">FAQ</a>
+  </aside>
+
+  <main class="docs-main">
+    <section id="intro">
+      <h1>Subway Hood Docs</h1>
+      <p class="lead">Subway Hood is a lightweight <b>Web3 subway runner</b>: dash down the tracks, dodge trains, stack coins, and climb a global leaderboard to earn from a <b>USDT prize pool</b>. Play free in Practice, or hold <b id="v-min">$5 worth</b> of <b>$<span id="v-sym">HOOD</span></b> to Compete for rewards.</p>
+      <p><span class="pill live">Game &amp; site: live</span> &nbsp; <span class="pill live">Leaderboard API: live</span> &nbsp; <span class="pill soon">$HOOD token: <span id="v-status">coming soon</span></span></p>
+    </section>
+
+    <section id="quickstart">
+      <h2>Quick start</h2>
+      <ol>
+        <li>Open the game and hit <b>Play</b> — no wallet needed for Practice.</li>
+        <li>Connect an EVM wallet (MetaMask or compatible) to bind your profile to your address.</li>
+        <li>Hold at least <b id="v-min2">$5 worth</b> of <b>$<span class="v-sym">HOOD</span></b> to unlock <b>Compete</b> — now your scores are recorded.</li>
+        <li>Rack up your best run. The leaderboard splits the pool.</li>
+      </ol>
+    </section>
+
+    <section id="gameplay">
+      <h2>Gameplay &amp; controls</h2>
+      <p>Three lanes. You run automatically — your job is to survive as long as possible. Speed ramps up over time; oncoming trains rush toward you.</p>
+      <table class="kv">
+        <tr><td>Switch lane</td><td>◀ / ▶ arrows, or A / D — swipe left/right on mobile</td></tr>
+        <tr><td>Jump</td><td>Space / ▲ / W — swipe up on mobile</td></tr>
+        <tr><td>Avoid (tall)</td><td>Trains, barriers, signal boxes → change lane</td></tr>
+        <tr><td>Jump over (low)</td><td>Cones, crates → jump</td></tr>
+        <tr><td>Score</td><td>Distance travelled + coins collected. One crash = game over.</td></tr>
+      </table>
+    </section>
+
+    <section id="modes">
+      <h2>Modes &amp; eligibility</h2>
+      <h3>Practice</h3>
+      <p>Free for everyone, no wallet or token required. You can play the full game — but <b>Practice scores are never recorded</b> and are not eligible for the pool.</p>
+      <h3>Compete</h3>
+      <p>Unlocks when your wallet holds at least <b id="v-min3">$5 worth</b> of <b>$<span class="v-sym">HOOD</span></b> — any token amount is fine as long as it's worth that much. In Compete, each run is validated by the server and recorded on the live leaderboard.</p>
+      <div class="callout">Eligibility is by <b>USD value</b> of your holdings (<code id="v-usd">$5</code>), not a fixed token count — so it stays fair as the price moves.</div>
+    </section>
+
+    <section id="token">
+      <h2>$HOOD &amp; the Pons launch</h2>
+      <p>$<span class="v-sym">HOOD</span> is the game token. It launches on the <b>Pons Launchpad</b> on <b id="v-chain">Robinhood Chain</b> as a <b>fair-launch bonding curve</b> — no presale and no team allocation. Everyone buys on the same curve.</p>
+      <ul>
+        <li><b>Fair launch</b> — 100% of supply goes to the bonding curve.</li>
+        <li><b>Bonding curve</b> — price rises as people buy; get in early before graduation.</li>
+        <li><b>Graduation → DEX</b> — once the curve fills, liquidity migrates to a DEX and locks, and Compete gating goes fully live.</li>
+      </ul>
+      <div class="callout">When the token is live, the <b>Buy on Pons</b> button on the home page links straight to its Pons token page.</div>
+    </section>
+
+    <section id="rewards">
+      <h2>Prize pool &amp; rewards</h2>
+      <p>The current pool is <b id="v-pool">5,000 USDT</b>. Rewards are <b>not winner-takes-all</b> — every eligible player earns a share.</p>
+      <ul>
+        <li><b>Pro-rata by basis points.</b> Your share = your points ÷ total points, expressed in basis points (1 bps = 0.01%).</li>
+        <li><b>2-day (48h) cooldown.</b> Distributions run at most once every 48 hours.</li>
+        <li><b>Paid from the treasury.</b> The backend computes each address's bps; USDT is paid out from the project treasury.</li>
+      </ul>
+      <p>Example: if you produced 3% of all points in a cycle, you'd receive ~3% (300 bps) of that cycle's distributed pool.</p>
+    </section>
+
+    <section id="leaderboard">
+      <h2>Leaderboard &amp; anti-cheat</h2>
+      <p>The leaderboard is served by a live backend. Every competitive run is checked before it's accepted:</p>
+      <ul>
+        <li><b>Signed session per run</b> — one-time token issued at the start of each run.</li>
+        <li><b>Server-measured duration</b> — the client's timing is never trusted.</li>
+        <li><b>Plausibility checks</b> — score can't exceed the max physically possible for that run length; coin counts are bounded.</li>
+        <li><b>Rate limits</b> per IP, and a locked CORS origin.</li>
+      </ul>
+      <div class="callout warn"><b>Roadmap:</b> heuristics deter casual cheating but aren't bulletproof. Planned upgrades: <b>server-side on-chain balance verification</b> for Compete, and <b>replay validation</b> (re-simulating a run from its input log + seed) for full integrity.</div>
+    </section>
+
+    <section id="treasury">
+      <h2>Treasury &amp; payouts</h2>
+      <p>Payouts are <b>manual and transparent</b>: the service only computes basis-point allocations — it never moves funds automatically.</p>
+      <table class="kv">
+        <tr><td>Treasury address</td><td><code>0xd7837FEfB43e659473F89d528996F454861c0977</code></td></tr>
+        <tr><td>Distribution</td><td>Owner runs the payout calculation each cycle (48h cooldown), then sends USDT from the treasury per the bps output.</td></tr>
+        <tr><td>Custody</td><td>The backend holds no keys to the treasury and cannot transfer funds.</td></tr>
+      </table>
+    </section>
+
+    <section id="faq">
+      <h2>FAQ</h2>
+      <h3>Do I need a token to play?</h3>
+      <p>No — Practice is free. Holding <b id="v-min4">$5 worth</b> of $<span class="v-sym">HOOD</span> unlocks Compete, where scores count toward the pool.</p>
+      <h3>Which wallets are supported?</h3>
+      <p>Any injected EVM wallet (MetaMask and compatible).</p>
+      <h3>Is it heavy on my device?</h3>
+      <p>No — it's lightweight WebGL and runs in the browser on phones and laptops. No install.</p>
+      <h3>Can I hide the game's API requests from DevTools?</h3>
+      <p>No. Any request a browser makes is visible in the Network tab — that's how browsers work. Security comes from <b>server-side validation</b>, not from hiding URLs.</p>
+      <p style="margin-top:20px"><a href="index.html" class="btn btn-ghost btn-sm">← Back to home</a> &nbsp; <a href="game.html" class="btn btn-primary btn-sm">▶ Play now</a></p>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="fine" style="border:0;padding-top:0">
+      <span>© 2026 Subway Hood — Play · Earn · Own.</span>
+      <span>Not financial advice · Play responsibly.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bg.js"></script>
+<script src="config.js"></script>
+<script>
+  const C = window.CONFIG || {};
+  const sym = C.tokenSymbol || 'HOOD';
+  const usd = '$' + (C.minHoldUsd || 5);
+  const worth = usd + ' worth';
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  document.querySelectorAll('.v-sym').forEach(e => e.textContent = sym);
+  set('v-sym', sym);
+  ['v-min','v-min2','v-min3','v-min4'].forEach(id => set(id, worth));
+  set('v-usd', usd);
+  set('v-pool', C.prizePool || '5,000 USDT');
+  set('v-chain', (C.launchpad && C.launchpad.chain) || C.chainName || 'Robinhood Chain');
+  set('v-status', (C.launchpad && C.launchpad.status) || 'coming soon');
+
+  // active section highlight
+  const links = [...document.querySelectorAll('.docs-side a')];
+  const map = {};
+  links.forEach(a => { const id = a.getAttribute('href').slice(1); const s = document.getElementById(id); if (s) map[id] = a; });
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { links.forEach(l => l.classList.remove('active')); map[e.target.id] && map[e.target.id].classList.add('active'); } });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  Object.keys(map).forEach(id => io.observe(document.getElementById(id)));
+</script>
+</body>
+</html>

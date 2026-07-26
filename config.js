@@ -48,6 +48,6 @@ window.CONFIG = {
   social: {
     twitter: "#",
     telegram: "#",
-    docs: "#"
+    docs: "docs.html"
   }
 };
