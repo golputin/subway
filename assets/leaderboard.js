@@ -7,6 +7,17 @@
 (function () {
   const C = window.CONFIG || {};
   const KEY = "sh_leaderboard";
+  const base = () => C.apiBase.replace(/\/$/, "");
+  let session = null; // anti-cheat session token from the backend
+
+  async function startSession() {
+    if (!C.apiBase) return null;
+    try {
+      const r = await fetch(base() + "/session", { method: "POST" });
+      if (r.ok) { session = await r.json(); return session; }
+    } catch (e) { console.warn("session start failed", e); }
+    return null;
+  }
 
   // seed a few fake entries so the board never looks empty in the demo
   const SEED = [
@@ -40,13 +51,21 @@
   }
 
   async function submit(entry) {
-    // entry: { addr, score, mode }
+    // entry: { addr, address, score, coins, mode, durationMs }
     if (C.apiBase) {
       try {
-        const r = await fetch(C.apiBase.replace(/\/$/, "") + "/scores", {
+        const body = {
+          addr: entry.addr, address: entry.address || null,
+          score: entry.score, coins: entry.coins || 0, mode: entry.mode,
+          durationMs: entry.durationMs || 0,
+          sessionId: session && session.sessionId,
+          signature: session && session.signature
+        };
+        const r = await fetch(base() + "/scores", {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(entry)
+          body: JSON.stringify(body)
         });
+        session = null; // one score per session
         if (r.ok) return await r.json();
       } catch (e) { console.warn("lb submit failed, using local", e); }
     }
@@ -61,5 +80,5 @@
     return { rank, total: list.length };
   }
 
-  window.SubwayLeaderboard = { getTop, submit };
+  window.SubwayLeaderboard = { getTop, submit, startSession };
 })();

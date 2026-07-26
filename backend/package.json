@@ -1,0 +1,16 @@
+{
+  "name": "subway-hood-leaderboard",
+  "version": "1.0.0",
+  "description": "Anti-cheat leaderboard backend for Subway Hood (session tokens, plausibility checks, basis-point prize distribution with a 2-day cooldown).",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

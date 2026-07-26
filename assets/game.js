@@ -25,7 +25,7 @@ const G = {
   running: false, mode: 'demo',
   lane: 1, targetX: 0, y: 0, vy: 0, grounded: true,
   speed: 17, baseSpeed: 17, maxSpeed: 44,
-  distance: 0, score: 0, coins: 0, spawnClock: 0, runT: 0
+  distance: 0, score: 0, coins: 0, spawnClock: 0, runT: 0, startMs: 0
 };
 const el = id => document.getElementById(id);
 const mat = (c, r = 0.85, m = 0.05) => new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m });
@@ -380,6 +380,8 @@ function placeObstacle(lane) {
   Object.entries(rig.userData.kinds).forEach(([k, m]) => { m.visible = (k === key); });
   const active = rig.userData.kinds[key];
   rig.userData.low = !!active.userData.low;
+  // trains rush toward the player (oncoming) for extra tension
+  rig.userData.rush = (key === 'train') ? (6 + Math.random() * 7) : 0;
   rig.userData.active = true; rig.visible = true;
   rig.position.set(LANES[lane], 0, SPAWN_Z);
   return rig;
@@ -464,7 +466,7 @@ function tick() {
   // obstacles
   for (const o of obstacles) {
     if (!o.userData.active) continue;
-    o.position.z += dz;
+    o.position.z += dz + (o.userData.rush || 0) * dt;
     if (o.position.z > RECYCLE_Z) { o.userData.active = false; o.visible = false; continue; }
     if (Math.abs(o.position.z - PLAYER_Z) < 1.0 && Math.abs(o.position.x - player.position.x) < 1.2) {
       const clears = o.userData.low && G.y > 0.85;
@@ -499,6 +501,9 @@ function start(mode) {
   const badge = el('mode-badge');
   badge.textContent = G.mode === 'compete' ? 'COMPETE' : 'DEMO';
   badge.className = 'mode-badge ' + (G.mode === 'compete' ? 'compete' : 'demo');
+  G.startMs = performance.now();
+  // ask the backend (if configured) for an anti-cheat session token
+  try { window.SubwayLeaderboard && window.SubwayLeaderboard.startSession && window.SubwayLeaderboard.startSession(); } catch (e) {}
   G.running = true;
 }
 async function gameOver() {
@@ -508,7 +513,12 @@ async function gameOver() {
   let rankLine = '';
   try {
     if (window.SubwayLeaderboard) {
-      const res = await window.SubwayLeaderboard.submit({ addr, score: G.score, mode: G.mode });
+      const res = await window.SubwayLeaderboard.submit({
+        addr,
+        address: (window.SubwayWallet && window.SubwayWallet.address) || null,
+        score: G.score, coins: G.coins, mode: G.mode,
+        durationMs: Math.max(0, Math.round(performance.now() - G.startMs))
+      });
       if (res && res.rank) rankLine = G.mode === 'compete'
         ? `You're #${res.rank} on the leaderboard.`
         : `Local rank #${res.rank} — hold ${window.CONFIG.tokenSymbol} to compete for the pool.`;
