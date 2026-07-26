@@ -28,8 +28,8 @@ window.CONFIG = {
   // Read-only RPC used to check token balance on the token's chain, regardless of
   // which network the player's wallet is currently on.
   rpcUrl: "https://rpc.mainnet.chain.robinhood.com",
-  // Token contract players must hold to compete. Fill in after the token graduates / is created.
-  tokenAddress: "0x0c1eD62D7811e5b437e537Ac9d0592469C119C74", // TEST token
+  // Token contract players must hold to compete. Paste the OFFICIAL $HOOD address here after deploy on Pons.
+  tokenAddress: "",
   tokenSymbol: "HOOD",
   tokenDecimals: 18,
   // --- Compete eligibility ---
@@ -41,7 +41,7 @@ window.CONFIG = {
   tokenPriceUsd: 0,
   priceApi: "",
   // Fallback token-count gate, used only when no USD price is available yet.
-  minHold: 1, // TEST: hold >= 1 token to enter Compete
+  minHold: 100000,
 
   // --- Leaderboard backend ---
   // Anti-cheat leaderboard API (Hermes-deployed VPS). "" = local/simulated store.
