@@ -18,6 +18,7 @@ let renderer, scene, camera, clock, composer;
 let player, playerParts = {};
 let world = new THREE.Group();
 let obstacles = [], coins = [], buildings = [];
+let BUILD_SPAN = 168;
 let floorMat, wallMats = [], rain, rainPos, rainCount = 520;
 let raf = null;
 
@@ -75,14 +76,15 @@ function stripeTexture(color) {
 /* ---------- scene ---------- */
 function buildScene() {
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x04040a);
-  scene.fog = new THREE.Fog(0x04040a, 26, 72);
+  scene.background = skyTexture();
+  scene.fog = new THREE.Fog(0x120a2a, 34, 96);
 
-  camera = new THREE.PerspectiveCamera(64, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera = new THREE.PerspectiveCamera(66, window.innerWidth / window.innerHeight, 0.1, 300);
   camera.position.set(0, 5.0, 10.5);
-  camera.lookAt(0, 1.1, -10);
+  camera.lookAt(0, 1.4, -12);
 
-  scene.add(new THREE.AmbientLight(0x223055, 0.8));
+  scene.add(new THREE.AmbientLight(0x2a3568, 1.0));
+  scene.add(new THREE.HemisphereLight(0x6a4bff, 0x0a0a1a, 0.6));
   const key = new THREE.DirectionalLight(0xbcd0ff, 0.7); key.position.set(5, 14, 8); scene.add(key);
   const p1 = new THREE.PointLight(MAGENTA, 1.4, 70); p1.position.set(-7, 6, -8); scene.add(p1);
   const p2 = new THREE.PointLight(CYAN, 1.4, 70); p2.position.set(7, 6, -22); scene.add(p2);
@@ -113,7 +115,60 @@ function buildScene() {
   scene.add(world);
   buildPlayer();
   buildBuildings();
+  buildSkyline();
   buildRain();
+}
+
+/* sky gradient + stars + moon */
+function skyTexture() {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 1024;
+  const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 0, 1024);
+  g.addColorStop(0, '#05040f'); g.addColorStop(0.45, '#160a33');
+  g.addColorStop(0.66, '#3a1147'); g.addColorStop(0.78, '#120a2a'); g.addColorStop(1, '#070610');
+  x.fillStyle = g; x.fillRect(0, 0, 1024, 1024);
+  // horizon glow
+  const hg = x.createRadialGradient(512, 720, 20, 512, 720, 620);
+  hg.addColorStop(0, 'rgba(255,42,109,0.5)'); hg.addColorStop(0.5, 'rgba(160,68,255,0.18)'); hg.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = hg; x.fillRect(0, 300, 1024, 724);
+  // stars
+  for (let i = 0; i < 260; i++) {
+    const sx = Math.random() * 1024, sy = Math.random() * 560, r = Math.random() * 1.6;
+    x.fillStyle = `rgba(255,255,255,${0.25 + Math.random() * 0.6})`;
+    x.beginPath(); x.arc(sx, sy, r, 0, 7); x.fill();
+  }
+  // moon
+  const moon = x.createRadialGradient(760, 230, 10, 760, 230, 120);
+  moon.addColorStop(0, 'rgba(180,230,255,0.95)'); moon.addColorStop(0.4, 'rgba(120,180,255,0.5)'); moon.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = moon; x.beginPath(); x.arc(760, 230, 120, 0, 7); x.fill();
+  x.fillStyle = '#dfefff'; x.beginPath(); x.arc(760, 230, 46, 0, 7); x.fill();
+  return new THREE.CanvasTexture(c);
+}
+
+/* facade with randomly-lit neon windows (shared across buildings) */
+const WINDOW_TEX = [];
+function windowTexture() {
+  const c = document.createElement('canvas'); c.width = 128; c.height = 256;
+  const x = c.getContext('2d');
+  x.fillStyle = '#000'; x.fillRect(0, 0, 128, 256);
+  const cols = ['#19f0ff', '#ff2a6d', '#ffd300', '#a044ff', '#05ffa1'];
+  const cw = 20, ch = 22, gx = 8, gy = 8;
+  for (let yy = gy; yy < 256 - ch; yy += ch + gy) {
+    for (let xx = gx; xx < 128 - cw; xx += cw + gx) {
+      if (Math.random() < 0.55) {
+        x.fillStyle = cols[(Math.random() * cols.length) | 0];
+        x.globalAlpha = 0.5 + Math.random() * 0.5;
+        x.fillRect(xx, yy, cw, ch);
+        x.globalAlpha = 1;
+      }
+    }
+  }
+  const t = new THREE.CanvasTexture(c);
+  return t;
+}
+function getWinTex() {
+  if (WINDOW_TEX.length < 6) { const t = windowTexture(); WINDOW_TEX.push(t); return t; }
+  return WINDOW_TEX[(Math.random() * WINDOW_TEX.length) | 0];
 }
 
 function neonMat(color, intensity) {
@@ -143,20 +198,59 @@ function buildPlayer() {
 }
 
 function buildBuildings() {
-  for (let i = 0; i < 22; i++) {
-    const side = i % 2 === 0 ? -1 : 1;
-    const hgt = 6 + Math.random() * 10;
-    const col = Math.random() < 0.5 ? CYAN : MAGENTA;
-    const b = new THREE.Mesh(new THREE.BoxGeometry(1.6, hgt, 1.6),
-      new THREE.MeshStandardMaterial({ color: 0x0b0b1c, emissive: col, emissiveIntensity: 0.25, roughness: 0.6 }));
-    b.position.set(side * (8 + Math.random() * 5), hgt / 2 - 1, -i * 8 - Math.random() * 4);
-    b.userData.side = side;
-    buildings.push(b); world.add(b);
-    // a glowing sign strip
-    const s = new THREE.Mesh(new THREE.BoxGeometry(0.15, hgt * 0.5, 0.15), neonMat(col, 2.0));
-    s.position.set(b.position.x - side * 0.85, b.position.y, b.position.z);
-    s.userData.parent = b; b.userData.sign = s; world.add(s);
+  // Two rows of buildings per side form a lit corridor along the track.
+  const spacing = 7;
+  const perCol = 12;
+  BUILD_SPAN = spacing * perCol; // 84
+  // column definitions: [xCenter, widthRange, heightRange]
+  const cols = [
+    { x: -5.6, w: 2.2, h: [7, 13] },   // inner left
+    { x: -9.8, w: 3.4, h: [12, 22] },  // outer left (taller, farther)
+    { x: 5.6, w: 2.2, h: [7, 13] },    // inner right
+    { x: 9.8, w: 3.4, h: [12, 22] }    // outer right
+  ];
+  cols.forEach(col => {
+    for (let i = 0; i < perCol; i++) {
+      const hgt = col.h[0] + Math.random() * (col.h[1] - col.h[0]);
+      const wid = col.w * (0.7 + Math.random() * 0.6);
+      const tex = getWinTex();
+      const b = new THREE.Mesh(
+        new THREE.BoxGeometry(wid, hgt, wid),
+        new THREE.MeshStandardMaterial({
+          color: 0x0a0a18, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 1.15,
+          map: tex, roughness: 0.7, metalness: 0.2
+        })
+      );
+      const jitter = (Math.random() - 0.5) * 2;
+      b.position.set(col.x + jitter, hgt / 2 - 1, RECYCLE_Z - i * spacing);
+      buildings.push(b); world.add(b);
+      // rooftop neon crown
+      const col2 = Math.random() < 0.5 ? CYAN : MAGENTA;
+      const crown = new THREE.Mesh(new THREE.BoxGeometry(wid * 1.05, 0.35, wid * 1.05), neonMat(col2, 2.4));
+      crown.position.set(b.position.x, hgt - 1, b.position.z);
+      crown.userData.parent = b; b.userData.sign = crown; world.add(crown);
+    }
+  });
+}
+
+/* distant static skyline + big neon billboards for depth */
+function buildSkyline() {
+  // far silhouette band of glowing blocks on each side
+  for (let s = -1; s <= 1; s += 2) {
+    for (let i = 0; i < 14; i++) {
+      const h = 10 + Math.random() * 26;
+      const col = [CYAN, MAGENTA, VIOLET, GOLD][(Math.random() * 4) | 0];
+      const m = new THREE.Mesh(new THREE.BoxGeometry(2 + Math.random() * 3, h, 2),
+        new THREE.MeshStandardMaterial({ color: 0x08081a, emissive: col, emissiveIntensity: 0.35, roughness: 0.9 }));
+      m.position.set(s * (16 + Math.random() * 12), h / 2 - 2, -30 - i * 6);
+      scene.add(m);
+    }
   }
+  // a big glowing billboard in the distance
+  const bill = new THREE.Mesh(new THREE.PlaneGeometry(9, 5), neonMat(MAGENTA, 1.6));
+  bill.position.set(-13, 9, -70); bill.rotation.y = 0.5; scene.add(bill);
+  const bill2 = new THREE.Mesh(new THREE.PlaneGeometry(7, 4), neonMat(CYAN, 1.6));
+  bill2.position.set(13, 8, -88); bill2.rotation.y = -0.5; scene.add(bill2);
 }
 
 function buildRain() {
@@ -279,7 +373,7 @@ function tick() {
   buildings.forEach(b => {
     b.position.z += dz;
     if (b.userData.sign) b.userData.sign.position.z = b.position.z;
-    if (b.position.z > RECYCLE_Z) { b.position.z -= 176; if (b.userData.sign) b.userData.sign.position.z = b.position.z; }
+    if (b.position.z > RECYCLE_Z) { b.position.z -= BUILD_SPAN; if (b.userData.sign) b.userData.sign.position.z = b.position.z; }
   });
 
   // spawn
