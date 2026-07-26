@@ -101,7 +101,7 @@
       <div style="font-family:Anton;font-size:34px;letter-spacing:1px">$HOOD</div>
       <div style="color:var(--muted);margin:4px 0 18px">on <b id="chainName">Robinhood Chain</b> · <span id="launchStatus" style="color:var(--gold2)">Coming soon</span></div>
       <a id="buyBtn" href="#" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center">🚀 Buy on Pons Launchpad</a>
-      <p class="note" id="buyNote" style="margin-top:14px">SOON</code>.</p>
+      <p class="note" id="buyNote" style="margin-top:14px">Buy link opens here the moment $HOOD goes live on Pons.</p>
     </div>
   </div>
 </section>
@@ -198,8 +198,16 @@
   set('poolSlots', C.leaderboardSlots.toLocaleString());
   set('poolToken', '$' + C.tokenSymbol);
   set('howMin', '$' + (C.minHoldUsd || 5) + ' worth of $' + C.tokenSymbol);
-  const link = (id, u) => { const e = document.getElementById(id); if (e && u) e.href = u; };
-  if (C.social) { link('soc-x', C.social.twitter); link('soc-tg', C.social.telegram); link('soc-docs', C.social.docs); }
+  const link = (id, u, ext) => { const e = document.getElementById(id); if (e && u) { e.href = u; if (ext) { e.target = '_blank'; e.rel = 'noopener'; } } };
+  if (C.social) {
+    link('soc-x', C.social.twitter, true);
+    link('soc-docs', C.social.docs);
+    const tg = document.getElementById('soc-tg');
+    if (tg) {
+      if (C.social.telegram) { tg.href = C.social.telegram; tg.target = '_blank'; tg.rel = 'noopener'; }
+      else { tg.href = 'javascript:void(0)'; tg.title = 'Telegram — coming soon'; tg.addEventListener('click', () => alert('SOON')); }
+    }
+  }
 
   // launchpad (Pons)
   const lp = C.launchpad || {};

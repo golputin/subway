@@ -46,8 +46,8 @@ window.CONFIG = {
 
   // --- Links ---
   social: {
-    twitter: "#",
-    telegram: "#",
+    twitter: "https://x.com/subwayhoodfun",
+    telegram: "",   // empty -> shows "SOON" when clicked
     docs: "docs.html"
   }
 };
