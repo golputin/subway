@@ -73,7 +73,8 @@
     try {
       const token = new ethers.Contract(C.tokenAddress, ERC20_ABI, provider);
       const raw = await token.balanceOf(state.address);
-      const dec = C.tokenDecimals || 18;
+      let dec = C.tokenDecimals || 18;
+      try { dec = Number(await token.decimals()); } catch (e) {}
       state.balance = Number(ethers.formatUnits(raw, dec));
 
       const price = await getPriceUsd();

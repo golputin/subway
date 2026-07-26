@@ -26,7 +26,7 @@ window.CONFIG = {
   chainId: 0,
   chainName: "Robinhood Chain",
   // Token contract players must hold to compete. Fill in after the token graduates / is created.
-  tokenAddress: "",
+  tokenAddress: "0x0c1eD62D7811e5b437e537Ac9d0592469C119C74", // TEST token
   tokenSymbol: "HOOD",
   tokenDecimals: 18,
   // --- Compete eligibility ---
@@ -38,7 +38,7 @@ window.CONFIG = {
   tokenPriceUsd: 0,
   priceApi: "",
   // Fallback token-count gate, used only when no USD price is available yet.
-  minHold: 100000,
+  minHold: 1, // TEST: hold >= 1 token to enter Compete
 
   // --- Leaderboard backend ---
   // Anti-cheat leaderboard API (Hermes-deployed VPS). "" = local/simulated store.
