@@ -30,7 +30,8 @@ window.CONFIG = {
   tokenSymbol: "HOOD",
   tokenDecimals: 18,
   // Minimum amount to hold to enter Compete mode (human-readable).
-  minHold: 1000,
+  // Below this you play in Practice mode and your score is NOT recorded.
+  minHold: 100000,
 
   // --- Leaderboard backend ---
   // Anti-cheat leaderboard API (Hermes-deployed VPS). "" = local/simulated store.

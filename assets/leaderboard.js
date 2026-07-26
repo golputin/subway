@@ -19,14 +19,8 @@
     return null;
   }
 
-  // seed a few fake entries so the board never looks empty in the demo
-  const SEED = [
-    { addr: "0x9F2a…c1D4", score: 48210, mode: "compete" },
-    { addr: "0x3Ab7…88Fe", score: 41560, mode: "compete" },
-    { addr: "0x77c0…2b19", score: 38975, mode: "compete" },
-    { addr: "0xE41d…9a02", score: 30110, mode: "compete" },
-    { addr: "0x0d5B…7Cc3", score: 25640, mode: "demo" }
-  ];
+  // live board — no fake seed data
+  const SEED = [];
 
   function localGet() {
     try {

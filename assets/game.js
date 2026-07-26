@@ -22,7 +22,7 @@ let rain = null; // unused (kept for compatibility)
 let raf = null;
 
 const G = {
-  running: false, mode: 'demo',
+  running: false, mode: 'practice',
   lane: 1, targetX: 0, y: 0, vy: 0, grounded: true,
   speed: 17, baseSpeed: 17, maxSpeed: 44,
   distance: 0, score: 0, coins: 0, spawnClock: 0, runT: 0, startMs: 0
@@ -495,33 +495,37 @@ function reset() {
   player.position.set(0, 0, PLAYER_Z);
 }
 function start(mode) {
-  G.mode = mode || (window.SubwayWallet ? window.SubwayWallet.mode : 'demo');
+  G.mode = mode || (window.SubwayWallet ? window.SubwayWallet.mode : 'practice');
   reset();
   el('overlay').classList.add('hidden');
   const badge = el('mode-badge');
-  badge.textContent = G.mode === 'compete' ? 'COMPETE' : 'DEMO';
-  badge.className = 'mode-badge ' + (G.mode === 'compete' ? 'compete' : 'demo');
+  badge.textContent = G.mode === 'compete' ? 'COMPETE' : 'PRACTICE';
+  badge.className = 'mode-badge ' + (G.mode === 'compete' ? 'compete' : 'practice');
   G.startMs = performance.now();
-  // ask the backend (if configured) for an anti-cheat session token
-  try { window.SubwayLeaderboard && window.SubwayLeaderboard.startSession && window.SubwayLeaderboard.startSession(); } catch (e) {}
+  // only competitive runs get an anti-cheat session (practice is never recorded)
+  if (G.mode === 'compete') {
+    try { window.SubwayLeaderboard && window.SubwayLeaderboard.startSession && window.SubwayLeaderboard.startSession(); } catch (e) {}
+  }
   G.running = true;
 }
 async function gameOver() {
   G.running = false;
   const addr = (window.SubwayWallet && window.SubwayWallet.address)
-    ? window.SubwayWallet.short(window.SubwayWallet.address) : 'You (demo)';
+    ? window.SubwayWallet.short(window.SubwayWallet.address) : 'You';
   let rankLine = '';
+  const minHold = (window.CONFIG.minHold || 0).toLocaleString();
   try {
-    if (window.SubwayLeaderboard) {
+    if (G.mode === 'compete' && window.SubwayLeaderboard) {
       const res = await window.SubwayLeaderboard.submit({
         addr,
         address: (window.SubwayWallet && window.SubwayWallet.address) || null,
         score: G.score, coins: G.coins, mode: G.mode,
         durationMs: Math.max(0, Math.round(performance.now() - G.startMs))
       });
-      if (res && res.rank) rankLine = G.mode === 'compete'
-        ? `You're #${res.rank} on the leaderboard.`
-        : `Local rank #${res.rank} — hold ${window.CONFIG.tokenSymbol} to compete for the pool.`;
+      if (res && res.rank) rankLine = `You're #${res.rank} on the leaderboard.`;
+    } else {
+      // practice: score is NOT recorded
+      rankLine = `Practice run — score not recorded. Hold ${minHold} $${window.CONFIG.tokenSymbol} to compete for the pool.`;
     }
   } catch (e) {}
   el('ov-title').textContent = 'Busted';

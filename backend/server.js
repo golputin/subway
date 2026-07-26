@@ -94,7 +94,7 @@ app.post('/scores', (req, res) => {
   const ip = ipOf(req);
   if (rateLimited('score:' + ip, 60, 60000)) return res.status(429).json({ error: 'slow down' });
 
-  const { sessionId, signature, address, score, coins = 0, mode = 'demo', addr } = req.body || {};
+  const { sessionId, signature, address, score, coins = 0, mode = 'practice', addr } = req.body || {};
   const s = Number(score);
   if (!Number.isFinite(s) || s < 0 || s > 5e7) return res.status(400).json({ error: 'bad score' });
 

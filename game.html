@@ -22,7 +22,7 @@
     <div class="stat"><small>COINS</small><span id="hud-coins">0</span></div>
   </div>
   <div class="right" style="align-items:flex-end">
-    <span id="mode-badge" class="mode-badge demo">DEMO</span>
+    <span id="mode-badge" class="mode-badge practice">PRACTICE</span>
     <div class="stat" id="wallet-stat" style="display:none"><small>WALLET</small><span id="hud-wallet">—</span></div>
   </div>
 </div>
@@ -44,7 +44,7 @@
       <button id="btn-start" class="btn btn-primary">▶ Start Run</button>
       <button id="btn-connect" class="btn btn-ghost">Connect Wallet</button>
     </div>
-    <p class="note" id="mode-note">Not connected — playing in demo mode. Connect & hold the token to compete for the pool.</p>
+    <p class="note" id="mode-note">Practice mode — score not recorded. Connect & hold $HOOD to compete for the pool.</p>
   </div>
 </div>
 
@@ -63,7 +63,8 @@
   import './assets/game.js';
 
   const params = new URLSearchParams(location.search);
-  const forceDemo = params.has('demo');
+  const forcePractice = params.has('practice') || params.has('demo');
+  const minHold = (window.CONFIG.minHold || 0).toLocaleString();
 
   function refreshMode() {
     const w = window.SubwayWallet;
@@ -75,12 +76,12 @@
       wStat.style.display = '';
       document.getElementById('btn-connect').style.display = 'none';
     }
-    const mode = forceDemo ? 'demo' : w.mode;
-    badge.textContent = mode === 'compete' ? 'COMPETE' : 'DEMO';
-    badge.className = 'mode-badge ' + (mode === 'compete' ? 'compete' : 'demo');
+    const mode = forcePractice ? 'practice' : w.mode;
+    badge.textContent = mode === 'compete' ? 'COMPETE' : 'PRACTICE';
+    badge.className = 'mode-badge ' + (mode === 'compete' ? 'compete' : 'practice');
     if (mode === 'compete') note.textContent = 'Compete mode — your score counts toward the prize pool. Good luck.';
-    else if (w.address) note.textContent = 'Connected, but not enough ' + window.CONFIG.tokenSymbol + ' to compete. Playing demo.';
-    else note.textContent = 'Not connected — demo mode. Connect & hold the token to compete for the pool.';
+    else if (w.address) note.textContent = 'Connected, but you need ' + minHold + ' $' + window.CONFIG.tokenSymbol + ' to compete. Practice mode — score not recorded.';
+    else note.textContent = 'Practice mode — score not recorded. Connect & hold ' + minHold + ' $' + window.CONFIG.tokenSymbol + ' to compete.';
   }
 
   window.addEventListener('DOMContentLoaded', () => {
@@ -89,8 +90,7 @@
     refreshMode();
 
     document.getElementById('btn-start').addEventListener('click', () => {
-      const mode = forceDemo ? 'demo' : window.SubwayWallet.mode;
-      document.getElementById('ov-score').style.display = mode ? 'block' : 'none';
+      const mode = forcePractice ? 'practice' : window.SubwayWallet.mode;
       document.getElementById('ov-score').style.display = 'none';
       window.SubwayGame.start(mode);
     });

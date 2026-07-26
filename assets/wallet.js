@@ -16,7 +16,7 @@
     chainId: null,
     balance: null,     // human-readable number of gated token
     eligible: false,   // holds enough token -> compete
-    mode: "demo"       // "demo" | "compete"
+    mode: "practice"       // "practice" | "compete"
   };
 
   const listeners = [];
@@ -29,7 +29,7 @@
 
   async function connect() {
     if (!hasWallet()) {
-      alert("No Web3 wallet found. Install MetaMask to connect — or just hit Play Demo.");
+      alert("No Web3 wallet found. Install MetaMask to connect — or just hit Play (Practice).");
       return state;
     }
     try {
@@ -52,11 +52,11 @@
     state.balance = null;
     state.eligible = false;
 
-    // If no token configured yet, we can't gate — stay in demo but connected.
-    if (!C.tokenAddress) { state.mode = "demo"; return; }
+    // If no token configured yet, we can't gate — stay in practice but connected.
+    if (!C.tokenAddress) { state.mode = "practice"; return; }
 
     // Wrong network? not eligible.
-    if (C.chainId && state.chainId !== C.chainId) { state.mode = "demo"; return; }
+    if (C.chainId && state.chainId !== C.chainId) { state.mode = "practice"; return; }
 
     try {
       const token = new ethers.Contract(C.tokenAddress, ERC20_ABI, provider);
@@ -64,10 +64,10 @@
       const dec = C.tokenDecimals || 18;
       state.balance = Number(ethers.formatUnits(raw, dec));
       state.eligible = state.balance >= (C.minHold || 0);
-      state.mode = state.eligible ? "compete" : "demo";
+      state.mode = state.eligible ? "compete" : "practice";
     } catch (e) {
       console.warn("balance check failed", e);
-      state.mode = "demo";
+      state.mode = "practice";
     }
   }
 
@@ -84,7 +84,7 @@
     } catch (e) { console.warn("switch failed", e); }
   }
 
-  function playDemo() { state.mode = "demo"; emit(); }
+  function playDemo() { state.mode = "practice"; emit(); }
 
   function persist() {
     try { localStorage.setItem("sh_addr", state.address || ""); } catch (e) {}
