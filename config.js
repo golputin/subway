@@ -42,7 +42,7 @@ window.CONFIG = {
 
   // --- Leaderboard backend ---
   // Anti-cheat leaderboard API (Hermes-deployed VPS). "" = local/simulated store.
-  apiBase: "https://api.neoparty.web.id",
+  apiBase: "https://api.subwayhood.fun",
 
   // --- Links ---
   social: {
