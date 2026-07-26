@@ -17,8 +17,8 @@ window.CONFIG = {
   launchpad: {
     platform: "Pons",
     chain: "Robinhood Chain",
-    url: "",                 // your Pons token page once created, e.g. https://ponsfamily.com/launchpad/<token>
-    status: "Coming soon"    // "Coming soon" | "Live on curve" | "Graduated"
+    url: "https://www.ponsfamily.com/launchpad/0x663b83ffd94bfaf21a59b80849114214af31301a",
+    status: "Live on curve" // "Coming soon" | "Live on curve" | "Graduated"
   },
 
   // --- Token gating (Web3) ---
@@ -28,18 +28,18 @@ window.CONFIG = {
   // Read-only RPC used to check token balance on the token's chain, regardless of
   // which network the player's wallet is currently on.
   rpcUrl: "https://rpc.mainnet.chain.robinhood.com",
-  // Token contract players must hold to compete. Paste the OFFICIAL $HOOD address here after deploy on Pons.
-  tokenAddress: "",
+  // Official token on Pons / Robinhood Chain (contract name "SubwayHood", ticker SBWY).
+  tokenAddress: "0x663B83FfD94bfAF21A59B80849114214AF31301A",
   tokenSymbol: "HOOD",
   tokenDecimals: 18,
   // --- Compete eligibility ---
   // Primary gate: USD value of your $HOOD holdings must be >= this. Any token
   // amount is fine as long as it's worth this much. Below it = Practice (not recorded).
   minHoldUsd: 5,
-  // Price of 1 $HOOD in USD. Until a live price feed exists, set it manually here,
-  // or set priceApi to an endpoint returning JSON { "usd": <number> }. 0 = unknown.
+  // Live price auto-detected from DexScreener (Robinhood Chain pair). Parser also
+  // accepts a plain { "usd": <number> } endpoint. tokenPriceUsd is a manual fallback.
   tokenPriceUsd: 0,
-  priceApi: "",
+  priceApi: "https://api.dexscreener.com/latest/dex/tokens/0x663b83ffd94bfaf21a59b80849114214af31301a",
   // Fallback token-count gate, used only when no USD price is available yet.
   minHold: 100000,
 

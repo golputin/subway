@@ -25,7 +25,17 @@
     if (C.priceApi) {
       try {
         const r = await fetch(C.priceApi);
-        if (r.ok) { const j = await r.json(); if (j && Number(j.usd) > 0) return Number(j.usd); }
+        if (r.ok) {
+          const j = await r.json();
+          // plain { usd: <n> }
+          if (j && Number(j.usd) > 0) return Number(j.usd);
+          // DexScreener shape { pairs: [ { chainId, priceUsd } ] }
+          if (j && Array.isArray(j.pairs) && j.pairs.length) {
+            const pick = j.pairs.find(p => p.chainId === "robinhood" && Number(p.priceUsd) > 0)
+                       || j.pairs.find(p => Number(p.priceUsd) > 0);
+            if (pick) return Number(pick.priceUsd);
+          }
+        }
       } catch (e) { console.warn("price fetch failed", e); }
     }
     return Number(C.tokenPriceUsd) || 0;
