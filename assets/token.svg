@@ -1,0 +1,46 @@
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HOOD token">
+  <defs>
+    <radialGradient id="coin" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#ffe27a"/>
+      <stop offset="0.55" stop-color="#f5b331"/>
+      <stop offset="1" stop-color="#b9781a"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="0" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff0b0"/><stop offset="1" stop-color="#c8891f"/>
+    </linearGradient>
+    <linearGradient id="hoodie" x1="0" y1="70" x2="0" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e0503c"/><stop offset="1" stop-color="#9e2a1e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- coin -->
+  <circle cx="120" cy="120" r="116" fill="url(#ring)"/>
+  <circle cx="120" cy="120" r="104" fill="url(#coin)"/>
+  <circle cx="120" cy="120" r="104" fill="none" stroke="#8a5a12" stroke-width="2" opacity="0.5"/>
+  <!-- coin ridges -->
+  <g stroke="#a9741d" stroke-width="2" opacity="0.35">
+    <circle cx="120" cy="120" r="110" fill="none" stroke-dasharray="3 5"/>
+  </g>
+
+  <!-- hooded character bust -->
+  <g>
+    <!-- shoulders / hoodie -->
+    <path d="M52 210 C56 158 84 138 120 138 C156 138 184 158 188 210 Z" fill="url(#hoodie)"/>
+    <!-- hood around head -->
+    <path d="M74 128 C74 82 94 60 120 60 C146 60 166 82 166 128 C150 118 136 114 120 114 C104 114 90 118 74 128 Z" fill="#7c1f16"/>
+    <!-- face -->
+    <rect x="98" y="86" width="44" height="46" rx="16" fill="#eeb488"/>
+    <!-- hood brim shadow -->
+    <path d="M92 96 C100 82 140 82 148 96 C136 90 104 90 92 96 Z" fill="#5f160f"/>
+    <!-- eyes -->
+    <circle cx="110" cy="108" r="4.4" fill="#2a1a12"/>
+    <circle cx="130" cy="108" r="4.4" fill="#2a1a12"/>
+    <!-- drawstrings -->
+    <rect x="112" y="132" width="4" height="26" rx="2" fill="#f2c79a"/>
+    <rect x="124" y="132" width="4" height="26" rx="2" fill="#f2c79a"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="120" y="228" text-anchor="middle" font-family="Orbitron, Arial, sans-serif" font-weight="900"
+        font-size="22" fill="#3c2606" letter-spacing="2">HOOD</text>
+</svg>
