@@ -4,13 +4,15 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Subway Hood — Run the Underground. Earn from the Pool.</title>
-<meta name="description" content="Subway Hood is a Web3 endless runner. Connect your wallet, hold the token, climb the leaderboard and earn from the USDT prize pool. Free demo available."/>
+<meta name="description" content="Subway Hood is a Web3 cyberpunk endless runner. Connect your wallet, hold the token, climb the leaderboard and earn from the USDT prize pool. Free demo available."/>
 <link rel="icon" href="assets/logo.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css"/>
 </head>
 <body>
+<canvas id="bg-canvas"></canvas>
 
 <nav class="nav">
   <div class="container inner">
@@ -31,9 +33,9 @@
 <header class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="badge-pill"><span class="dot"></span> Web3 Endless Runner</span>
-      <h1>Run the underground.<br><span class="grad">Earn from the pool.</span></h1>
-      <p class="lead" id="leadText">Dodge, jump and dash through the tunnels. Climb the leaderboard and claim your slice of the prize pool. No token? Jump into the free demo.</p>
+      <span class="badge-pill"><span class="dot"></span> Web3 · Cyberpunk Runner</span>
+      <h1>Run the<br>underground.<br><span class="grad">Earn the pool.</span></h1>
+      <p class="lead">Dash through neon tunnels in the rain. Dodge, jump, and grab the glow. Climb the leaderboard and claim your slice of the prize pool — or jump into the free demo, no token needed.</p>
       <div class="cta">
         <a href="game.html" class="btn btn-primary">▶ Play Now</a>
         <a href="game.html?demo=1" class="btn btn-ghost">Try Demo</a>
@@ -45,6 +47,7 @@
       </div>
     </div>
     <div class="hero-art">
+      <div class="ring"></div>
       <img src="assets/logo.svg" alt="Subway Hood emblem"/>
     </div>
   </div>
@@ -52,33 +55,35 @@
 
 <section id="pool" class="container">
   <div class="pool">
-    <div class="section-sub" style="margin:0 auto 6px;color:var(--gold);font-weight:800;letter-spacing:1px">PRIZE POOL</div>
+    <p class="eyebrow">Prize Pool</p>
     <div class="amount" id="poolAmount">2,000 USDT</div>
     <p>Shared across the <b id="poolSlots">5,000</b> highest scores on the leaderboard. Compete mode requires holding the <b id="poolToken">HOOD</b> token — your on-chain proof of entry.</p>
   </div>
 </section>
 
 <section id="how" class="container">
+  <p class="eyebrow">Get in</p>
   <h2 class="section-title">How it works</h2>
-  <p class="section-sub">Three steps to get in the game.</p>
+  <p class="section-sub">Three steps from wallet to leaderboard.</p>
   <div class="cards">
     <div class="card"><span class="step-n">1</span><div class="ic">👛</div>
-      <h3>Connect wallet</h3><p>Link your wallet so your profile, scores and rewards are tied to your address — not a username someone can fake.</p></div>
+      <h3>Connect wallet</h3><p>Link your wallet so your profile, scores and rewards are tied to your address — not a username anyone can fake.</p></div>
     <div class="card"><span class="step-n">2</span><div class="ic">🪙</div>
-      <h3>Hold the token</h3><p>Hold at least <b id="howMin">1,000 HOOD</b> to unlock Compete mode and become eligible for the prize pool. No token yet? Play the demo free.</p></div>
+      <h3>Hold the token</h3><p>Hold at least <b id="howMin">1,000 HOOD</b> to unlock Compete mode and become eligible for the pool. No token yet? The demo is free.</p></div>
     <div class="card"><span class="step-n">3</span><div class="ic">🏆</div>
-      <h3>Climb & earn</h3><p>Run, dodge, collect coins and rack up your best score. The top of the leaderboard splits the pool.</p></div>
+      <h3>Climb & earn</h3><p>Run, dodge, collect coins and push your best score. The top of the leaderboard splits the pool.</p></div>
   </div>
 </section>
 
 <section id="leaderboard" class="container">
+  <p class="eyebrow">Live ranks</p>
   <h2 class="section-title">Leaderboard</h2>
   <p class="section-sub">Top runners right now. Compete-mode scores are eligible for the pool.</p>
   <table class="lb">
     <thead><tr><th>#</th><th>Player</th><th>Mode</th><th class="score">Score</th></tr></thead>
     <tbody id="lbBody"><tr><td colspan="4" style="color:var(--muted)">Loading…</td></tr></tbody>
   </table>
-  <p class="note">Leaderboard shown here runs on a local/simulated store until the backend is connected. See <code>config.js</code>.</p>
+  <p class="note">Leaderboard shown here runs on a local/simulated store until the backend is connected — see <code>config.js</code>.</p>
 </section>
 
 <footer>
@@ -88,12 +93,12 @@
   </div>
 </footer>
 
+<script src="assets/bg.js"></script>
 <script src="config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
 <script src="assets/wallet.js"></script>
 <script src="assets/leaderboard.js"></script>
 <script>
-  // hydrate copy from config
   const C = window.CONFIG;
   const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
   set('statPool', C.prizePool); set('poolAmount', C.prizePool);
@@ -102,7 +107,6 @@
   set('poolToken', C.tokenSymbol);
   set('howMin', C.minHold.toLocaleString() + ' ' + C.tokenSymbol);
 
-  // connect wallet
   const btn = document.getElementById('connectBtn');
   function paint(s) {
     if (s.address) {
@@ -114,7 +118,6 @@
   window.SubwayWallet.onChange(paint);
   btn.addEventListener('click', () => window.SubwayWallet.connect());
 
-  // leaderboard
   (async () => {
     const rows = await window.SubwayLeaderboard.getTop(10);
     const body = document.getElementById('lbBody');
