@@ -25,6 +25,9 @@ window.CONFIG = {
   // Set chainId to Robinhood Chain's id once confirmed. 0 = skip network check for now.
   chainId: 0,
   chainName: "Robinhood Chain",
+  // Read-only RPC used to check token balance on the token's chain, regardless of
+  // which network the player's wallet is currently on.
+  rpcUrl: "https://rpc.mainnet.chain.robinhood.com",
   // Token contract players must hold to compete. Fill in after the token graduates / is created.
   tokenAddress: "0x0c1eD62D7811e5b437e537Ac9d0592469C119C74", // TEST token
   tokenSymbol: "HOOD",

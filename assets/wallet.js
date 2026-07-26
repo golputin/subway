@@ -67,11 +67,13 @@
     // If no token configured yet, we can't gate — stay in practice but connected.
     if (!C.tokenAddress) { state.mode = "practice"; return; }
 
-    // Wrong network? not eligible.
-    if (C.chainId && state.chainId !== C.chainId) { state.mode = "practice"; return; }
+    // If we have a dedicated RPC we read balance there (any wallet network is fine).
+    // Otherwise require the wallet to be on the configured chain.
+    if (!C.rpcUrl && C.chainId && state.chainId !== C.chainId) { state.mode = "practice"; return; }
 
     try {
-      const token = new ethers.Contract(C.tokenAddress, ERC20_ABI, provider);
+      const readProvider = C.rpcUrl ? new ethers.JsonRpcProvider(C.rpcUrl) : provider;
+      const token = new ethers.Contract(C.tokenAddress, ERC20_ABI, readProvider);
       const raw = await token.balanceOf(state.address);
       let dec = C.tokenDecimals || 18;
       try { dec = Number(await token.decimals()); } catch (e) {}
