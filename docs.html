@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Subway Hood — Docs</title>
-<meta name="description" content="Subway Hood documentation: how to play, Practice vs Compete, $HOOD on the Pons Launchpad, prize pool & basis-point rewards, leaderboard & anti-cheat."/>
+<meta name="description" content="Subway Hood documentation: how to play, Practice vs Compete, $SBWY on the Pons Launchpad, prize pool & basis-point rewards, leaderboard & anti-cheat."/>
 <link rel="icon" href="assets/badge.jpg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,7 +68,7 @@
     <a href="#quickstart">Quick start</a>
     <a href="#gameplay">Gameplay & controls</a>
     <a href="#modes">Modes & eligibility</a>
-    <a href="#token">$HOOD & Pons launch</a>
+    <a href="#token">$SBWY & Pons launch</a>
     <a href="#rewards">Prize pool & rewards</a>
     <a href="#leaderboard">Leaderboard & anti-cheat</a>
     <a href="#treasury">Treasury & payouts</a>
@@ -78,8 +78,8 @@
   <main class="docs-main">
     <section id="intro">
       <h1>Subway Hood Docs</h1>
-      <p class="lead">Subway Hood is a lightweight <b>Web3 subway runner</b>: dash down the tracks, dodge trains, stack coins, and climb a global leaderboard to earn from a <b>USDT prize pool</b>. Play free in Practice, or hold <b id="v-min">$5 worth</b> of <b>$<span id="v-sym">HOOD</span></b> to Compete for rewards.</p>
-      <p><span class="pill live">Game &amp; site: live</span> &nbsp; <span class="pill live">Leaderboard API: live</span> &nbsp; <span class="pill soon">$HOOD token: <span id="v-status">coming soon</span></span></p>
+      <p class="lead">Subway Hood is a lightweight <b>Web3 subway runner</b>: dash down the tracks, dodge trains, stack coins, and climb a global leaderboard to earn from a <b>USDT prize pool</b>. Play free in Practice, or hold <b id="v-min">$5 worth</b> of <b>$<span id="v-sym">SBWY</span></b> to Compete for rewards.</p>
+      <p><span class="pill live">Game &amp; site: live</span> &nbsp; <span class="pill live">Leaderboard API: live</span> &nbsp; <span class="pill soon">$SBWY token: <span id="v-status">coming soon</span></span></p>
     </section>
 
     <section id="quickstart">
@@ -87,7 +87,7 @@
       <ol>
         <li>Open the game and hit <b>Play</b> — no wallet needed for Practice.</li>
         <li>Connect an EVM wallet (MetaMask or compatible) to bind your profile to your address.</li>
-        <li>Hold at least <b id="v-min2">$5 worth</b> of <b>$<span class="v-sym">HOOD</span></b> to unlock <b>Compete</b> — now your scores are recorded.</li>
+        <li>Hold at least <b id="v-min2">$5 worth</b> of <b>$<span class="v-sym">SBWY</span></b> to unlock <b>Compete</b> — now your scores are recorded.</li>
         <li>Rack up your best run. The leaderboard splits the pool.</li>
       </ol>
     </section>
@@ -109,13 +109,13 @@
       <h3>Practice</h3>
       <p>Free for everyone, no wallet or token required. You can play the full game — but <b>Practice scores are never recorded</b> and are not eligible for the pool.</p>
       <h3>Compete</h3>
-      <p>Unlocks when your wallet holds at least <b id="v-min3">$5 worth</b> of <b>$<span class="v-sym">HOOD</span></b> — any token amount is fine as long as it's worth that much. In Compete, each run is validated by the server and recorded on the live leaderboard.</p>
+      <p>Unlocks when your wallet holds at least <b id="v-min3">$5 worth</b> of <b>$<span class="v-sym">SBWY</span></b> — any token amount is fine as long as it's worth that much. In Compete, each run is validated by the server and recorded on the live leaderboard.</p>
       <div class="callout">Eligibility is by <b>USD value</b> of your holdings (<code id="v-usd">$5</code>), not a fixed token count — so it stays fair as the price moves.</div>
     </section>
 
     <section id="token">
-      <h2>$HOOD &amp; the Pons launch</h2>
-      <p>$<span class="v-sym">HOOD</span> is the game token. It launches on the <b>Pons Launchpad</b> on <b id="v-chain">Robinhood Chain</b> as a <b>fair-launch bonding curve</b> — no presale and no team allocation. Everyone buys on the same curve.</p>
+      <h2>$SBWY &amp; the Pons launch</h2>
+      <p>$<span class="v-sym">SBWY</span> is the game token. It launches on the <b>Pons Launchpad</b> on <b id="v-chain">Robinhood Chain</b> as a <b>fair-launch bonding curve</b> — no presale and no team allocation. Everyone buys on the same curve.</p>
       <ul>
         <li><b>Fair launch</b> — 100% of supply goes to the bonding curve.</li>
         <li><b>Bonding curve</b> — price rises as people buy; get in early before graduation.</li>
@@ -160,7 +160,7 @@
     <section id="faq">
       <h2>FAQ</h2>
       <h3>Do I need a token to play?</h3>
-      <p>No — Practice is free. Holding <b id="v-min4">$5 worth</b> of $<span class="v-sym">HOOD</span> unlocks Compete, where scores count toward the pool.</p>
+      <p>No — Practice is free. Holding <b id="v-min4">$5 worth</b> of $<span class="v-sym">SBWY</span> unlocks Compete, where scores count toward the pool.</p>
       <h3>Which wallets are supported?</h3>
       <p>Any injected EVM wallet (MetaMask and compatible).</p>
       <h3>Is it heavy on my device?</h3>
@@ -185,7 +185,7 @@
 <script src="config.js"></script>
 <script>
   const C = window.CONFIG || {};
-  const sym = C.tokenSymbol || 'HOOD';
+  const sym = C.tokenSymbol || 'SBWY';
   const usd = '$' + (C.minHoldUsd || 5);
   const worth = usd + ' worth';
   const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };

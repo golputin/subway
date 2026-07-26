@@ -30,7 +30,7 @@ window.CONFIG = {
   rpcUrl: "https://rpc.mainnet.chain.robinhood.com",
   // Official token on Pons / Robinhood Chain (contract name "SubwayHood", ticker SBWY).
   tokenAddress: "0x663B83FfD94bfAF21A59B80849114214AF31301A",
-  tokenSymbol: "HOOD",
+  tokenSymbol: "SBWY",
   tokenDecimals: 18,
   // --- Compete eligibility ---
   // Primary gate: USD value of your $HOOD holdings must be >= this. Any token
