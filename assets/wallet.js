@@ -15,9 +15,21 @@
     address: null,
     chainId: null,
     balance: null,     // human-readable number of gated token
-    eligible: false,   // holds enough token -> compete
+    worthUsd: null,    // balance * price (USD)
+    eligible: false,   // holdings worth >= minHoldUsd -> compete
     mode: "practice"       // "practice" | "compete"
   };
+
+  // Resolve $HOOD price in USD: priceApi (JSON {usd}) first, else static tokenPriceUsd.
+  async function getPriceUsd() {
+    if (C.priceApi) {
+      try {
+        const r = await fetch(C.priceApi);
+        if (r.ok) { const j = await r.json(); if (j && Number(j.usd) > 0) return Number(j.usd); }
+      } catch (e) { console.warn("price fetch failed", e); }
+    }
+    return Number(C.tokenPriceUsd) || 0;
+  }
 
   const listeners = [];
   function onChange(fn) { listeners.push(fn); }
@@ -63,7 +75,17 @@
       const raw = await token.balanceOf(state.address);
       const dec = C.tokenDecimals || 18;
       state.balance = Number(ethers.formatUnits(raw, dec));
-      state.eligible = state.balance >= (C.minHold || 0);
+
+      const price = await getPriceUsd();
+      if (price > 0 && Number(C.minHoldUsd) > 0) {
+        // USD-value gate: any amount is fine as long as it's worth >= minHoldUsd
+        state.worthUsd = state.balance * price;
+        state.eligible = state.worthUsd >= Number(C.minHoldUsd);
+      } else {
+        // no live price yet -> fall back to a token-count gate
+        state.worthUsd = null;
+        state.eligible = state.balance >= (C.minHold || 0);
+      }
       state.mode = state.eligible ? "compete" : "practice";
     } catch (e) {
       console.warn("balance check failed", e);

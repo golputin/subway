@@ -80,7 +80,7 @@
   <p class="section-sub reveal">Three steps from wallet to leaderboard.</p>
   <div class="grid g3">
     <div class="card reveal"><span class="step-n">1</span><div class="ic">👛</div><h3>Connect wallet</h3><p>Link your wallet so your profile, scores and rewards are tied to your address — not a fakeable username.</p></div>
-    <div class="card reveal"><span class="step-n">2</span><div class="ic">🪙</div><h3>Hold $HOOD</h3><p>Hold at least <b id="howMin">100,000 HOOD</b> to unlock Compete mode and enter the prize pool. Below that you play free in Practice — scores aren't recorded.</p></div>
+    <div class="card reveal"><span class="step-n">2</span><div class="ic">🪙</div><h3>Hold $HOOD</h3><p>Hold at least <b id="howMin">$5 worth of $HOOD</b> to unlock Compete mode and enter the prize pool. Below that you play free in Practice — scores aren't recorded.</p></div>
     <div class="card reveal"><span class="step-n">3</span><div class="ic">🏆</div><h3>Climb & earn</h3><p>Run, dodge, and push your best score. The top of the leaderboard splits the pool.</p></div>
   </div>
 </section>
@@ -141,7 +141,7 @@
   <p class="eyebrow reveal">Questions</p>
   <h2 class="section-title reveal">FAQ</h2>
   <div class="faq reveal">
-    <details><summary>Do I need a token to play?</summary><p>No. Anyone can play free in <b>Practice</b> mode instantly — but Practice scores are <b>not recorded</b>. Holding at least <b>100,000 $HOOD</b> unlocks <b>Compete</b> mode, where your scores are recorded and eligible for the prize pool.</p></details>
+    <details><summary>Do I need a token to play?</summary><p>No. Anyone can play free in <b>Practice</b> mode instantly — but Practice scores are <b>not recorded</b>. Holding at least <b>$5 worth of $HOOD</b> unlocks <b>Compete</b> mode, where your scores are recorded and eligible for the prize pool.</p></details>
     <details><summary>Where can I buy $HOOD?</summary><p>$HOOD launches on the <b>Pons Launchpad</b> on <b>Robinhood Chain</b> as a fair-launch bonding curve. When it's live, the “Buy on Pons” button opens its token page. Early buyers get in on the curve before graduation.</p></details>
     <details><summary>What is “graduation”?</summary><p>On Pons, a token trades on a bonding curve until it reaches a market-cap threshold. At that point it <b>graduates</b>: its liquidity moves to a DEX and locks, making it freely tradable. That's when Compete-mode token gating switches on.</p></details>
     <details><summary>How are rewards calculated?</summary><p>Every eligible player earns a cut. Your share of the pool equals your share of the total points produced, measured in <b>basis points</b> (1 bps = 0.01%). Play more, score higher, earn a bigger slice — it's not winner-takes-all.</p></details>
@@ -154,7 +154,7 @@
 <section class="container">
   <div class="cta-band reveal">
     <h2>Ready to run the rails?</h2>
-    <p>Jump in now — free Practice, no wallet needed. Hold 100,000 $HOOD when you're ready to compete for the pool.</p>
+    <p>Jump in now — free Practice, no wallet needed. Hold $5 worth of $HOOD when you're ready to compete for the pool.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
       <a href="game.html" class="btn btn-primary">▶ Play Now</a>
       <a href="game.html?practice=1" class="btn btn-ghost">Play Practice</a>
@@ -197,7 +197,7 @@
   set('statSlots', C.leaderboardSlots.toLocaleString());
   set('poolSlots', C.leaderboardSlots.toLocaleString());
   set('poolToken', '$' + C.tokenSymbol);
-  set('howMin', C.minHold.toLocaleString() + ' ' + C.tokenSymbol);
+  set('howMin', '$' + (C.minHoldUsd || 5) + ' worth of $' + C.tokenSymbol);
   const link = (id, u) => { const e = document.getElementById(id); if (e && u) e.href = u; };
   if (C.social) { link('soc-x', C.social.twitter); link('soc-tg', C.social.telegram); link('soc-docs', C.social.docs); }
 

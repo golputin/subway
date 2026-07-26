@@ -64,7 +64,7 @@
 
   const params = new URLSearchParams(location.search);
   const forcePractice = params.has('practice') || params.has('demo');
-  const minHold = (window.CONFIG.minHold || 0).toLocaleString();
+  const needTxt = '$' + (window.CONFIG.minHoldUsd || 5) + ' worth of $' + window.CONFIG.tokenSymbol;
 
   function refreshMode() {
     const w = window.SubwayWallet;
@@ -80,8 +80,8 @@
     badge.textContent = mode === 'compete' ? 'COMPETE' : 'PRACTICE';
     badge.className = 'mode-badge ' + (mode === 'compete' ? 'compete' : 'practice');
     if (mode === 'compete') note.textContent = 'Compete mode — your score counts toward the prize pool. Good luck.';
-    else if (w.address) note.textContent = 'Connected, but you need ' + minHold + ' $' + window.CONFIG.tokenSymbol + ' to compete. Practice mode — score not recorded.';
-    else note.textContent = 'Practice mode — score not recorded. Connect & hold ' + minHold + ' $' + window.CONFIG.tokenSymbol + ' to compete.';
+    else if (w.address) note.textContent = 'Connected, but you need ' + needTxt + ' to compete. Practice mode — score not recorded.';
+    else note.textContent = 'Practice mode — score not recorded. Connect & hold ' + needTxt + ' to compete.';
   }
 
   window.addEventListener('DOMContentLoaded', () => {

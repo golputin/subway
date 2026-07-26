@@ -513,7 +513,7 @@ async function gameOver() {
   const addr = (window.SubwayWallet && window.SubwayWallet.address)
     ? window.SubwayWallet.short(window.SubwayWallet.address) : 'You';
   let rankLine = '';
-  const minHold = (window.CONFIG.minHold || 0).toLocaleString();
+  const needTxt = '$' + (window.CONFIG.minHoldUsd || 5) + ' worth of $' + window.CONFIG.tokenSymbol;
   try {
     if (G.mode === 'compete' && window.SubwayLeaderboard) {
       const res = await window.SubwayLeaderboard.submit({
@@ -525,7 +525,7 @@ async function gameOver() {
       if (res && res.rank) rankLine = `You're #${res.rank} on the leaderboard.`;
     } else {
       // practice: score is NOT recorded
-      rankLine = `Practice run — score not recorded. Hold ${minHold} $${window.CONFIG.tokenSymbol} to compete for the pool.`;
+      rankLine = `Practice run — score not recorded. Hold ${needTxt} to compete for the pool.`;
     }
   } catch (e) {}
   el('ov-title').textContent = 'Busted';

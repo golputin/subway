@@ -29,8 +29,15 @@ window.CONFIG = {
   tokenAddress: "",
   tokenSymbol: "HOOD",
   tokenDecimals: 18,
-  // Minimum amount to hold to enter Compete mode (human-readable).
-  // Below this you play in Practice mode and your score is NOT recorded.
+  // --- Compete eligibility ---
+  // Primary gate: USD value of your $HOOD holdings must be >= this. Any token
+  // amount is fine as long as it's worth this much. Below it = Practice (not recorded).
+  minHoldUsd: 5,
+  // Price of 1 $HOOD in USD. Until a live price feed exists, set it manually here,
+  // or set priceApi to an endpoint returning JSON { "usd": <number> }. 0 = unknown.
+  tokenPriceUsd: 0,
+  priceApi: "",
+  // Fallback token-count gate, used only when no USD price is available yet.
   minHold: 100000,
 
   // --- Leaderboard backend ---
