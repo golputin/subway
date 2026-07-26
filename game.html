@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>Subway Hood — Play</title>
+<link rel="icon" href="assets/logo.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body>
+
+<div class="game-wrap">
+  <canvas id="game-canvas"></canvas>
+</div>
+
+<div class="hud">
+  <div class="left">
+    <div class="stat"><small>SCORE</small><span id="hud-score">0</span></div>
+    <div class="stat"><small>COINS</small><span id="hud-coins">0</span></div>
+  </div>
+  <div class="right" style="align-items:flex-end">
+    <span id="mode-badge" class="mode-badge demo">DEMO</span>
+    <div class="stat" id="wallet-stat" style="display:none"><small>WALLET</small><span id="hud-wallet">—</span></div>
+  </div>
+</div>
+
+<a href="index.html" class="back-link">← Back to home</a>
+
+<div id="overlay" class="overlay">
+  <div class="box">
+    <img id="ov-emoji" src="assets/logo.svg" alt=""/>
+    <h2 id="ov-title">Subway Hood</h2>
+    <div id="ov-score" class="big-score" style="display:none"></div>
+    <p id="ov-sub">Dodge obstacles, jump the low blocks, grab coins. How far can you run?</p>
+    <div class="controls-hint">
+      <span><span class="key">◀</span><span class="key">▶</span> switch lane</span>
+      <span><span class="key">Space</span> jump</span>
+      <span>swipe on mobile</span>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button id="btn-start" class="btn btn-primary">▶ Start Run</button>
+      <button id="btn-connect" class="btn btn-ghost">Connect Wallet</button>
+    </div>
+    <p class="note" id="mode-note">Not connected — playing in demo mode. Connect & hold the token to compete for the pool.</p>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+<script src="assets/wallet.js"></script>
+<script src="assets/leaderboard.js"></script>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+  import './assets/game.js';
+
+  const params = new URLSearchParams(location.search);
+  const forceDemo = params.has('demo');
+
+  function refreshMode() {
+    const w = window.SubwayWallet;
+    const note = document.getElementById('mode-note');
+    const badge = document.getElementById('mode-badge');
+    const wStat = document.getElementById('wallet-stat');
+    if (w.address) {
+      document.getElementById('hud-wallet').textContent = w.short(w.address);
+      wStat.style.display = '';
+      document.getElementById('btn-connect').style.display = 'none';
+    }
+    const mode = forceDemo ? 'demo' : w.mode;
+    badge.textContent = mode === 'compete' ? 'COMPETE' : 'DEMO';
+    badge.className = 'mode-badge ' + (mode === 'compete' ? 'compete' : 'demo');
+    if (mode === 'compete') note.textContent = 'Compete mode — your score counts toward the prize pool. Good luck.';
+    else if (w.address) note.textContent = 'Connected, but not enough ' + window.CONFIG.tokenSymbol + ' to compete. Playing demo.';
+    else note.textContent = 'Not connected — demo mode. Connect & hold the token to compete for the pool.';
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    window.SubwayGame.init();
+    window.SubwayWallet.onChange(refreshMode);
+    refreshMode();
+
+    document.getElementById('btn-start').addEventListener('click', () => {
+      const mode = forceDemo ? 'demo' : window.SubwayWallet.mode;
+      document.getElementById('ov-score').style.display = mode ? 'block' : 'none';
+      document.getElementById('ov-score').style.display = 'none';
+      window.SubwayGame.start(mode);
+    });
+    document.getElementById('btn-connect').addEventListener('click', async () => {
+      await window.SubwayWallet.connect();
+      refreshMode();
+    });
+  });
+</script>
+</body>
+</html>
