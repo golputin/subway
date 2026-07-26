@@ -9,7 +9,7 @@ window.CONFIG = {
   tagline: "Run the underground. Earn from the pool.",
 
   // --- Prize pool (display only — real payout handled off-chain/by you) ---
-  prizePool: "2,000 USDT",
+  prizePool: "5,000 USDT",
   leaderboardSlots: 5000,
 
   // --- Launchpad (Pons) ---
