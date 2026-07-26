@@ -145,18 +145,19 @@ function makeCharacter() {
   hips.position.y = 0.82; g.add(hips);
   const head = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.46, 0.44), mat(SKIN, 0.75));
   head.position.y = 1.99; g.add(head);
+  // hood sits at the BACK of the head (toward the camera); face points forward (-z, into the run)
   const hood = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.5, 0.34), mat(HOOD, 0.85));
-  hood.position.set(0, 2.02, -0.16); g.add(hood);
+  hood.position.set(0, 2.02, 0.16); g.add(hood);
   const brim = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.14, 0.18), mat(HOOD, 0.85));
-  brim.position.set(0, 2.16, 0.2); g.add(brim);
-  // eyes
-  [-0.1, 0.1].forEach(ex => { const e = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.02), mat(0x201410, 0.5)); e.position.set(ex, 2.0, 0.23); g.add(e); });
+  brim.position.set(0, 2.16, -0.2); g.add(brim);
+  // eyes on the front of the face
+  [-0.1, 0.1].forEach(ex => { const e = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.02), mat(0x201410, 0.5)); e.position.set(ex, 2.0, -0.23); g.add(e); });
 
   function limb(len, w, color, foot) {
     const grp = new THREE.Group();
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, len, w), mat(color, 0.8));
     m.position.y = -len / 2; grp.add(m);
-    if (foot) { const s = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, 0.16, 0.42), mat(SHOE, 0.7)); s.position.set(0, -len + 0.02, 0.08); grp.add(s); }
+    if (foot) { const s = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, 0.16, 0.42), mat(SHOE, 0.7)); s.position.set(0, -len + 0.02, -0.08); grp.add(s); }
     return grp;
   }
   const armL = limb(0.78, 0.2, HOODIE); armL.position.set(-0.47, 1.62, 0); g.add(armL);
@@ -387,7 +388,7 @@ function tick() {
   if (playerParts.legL) {
     playerParts.legL.rotation.x = sw * 0.8; playerParts.legR.rotation.x = -sw * 0.8;
     playerParts.armL.rotation.x = -sw * 0.7; playerParts.armR.rotation.x = sw * 0.7;
-    playerParts.torso.rotation.x = 0.08;
+    playerParts.torso.rotation.x = -0.09;
   }
   player.position.y = G.y + Math.abs(sw) * 0.05;
   if (shadowBlob) { shadowBlob.position.x = player.position.x; const sc = 1 - Math.min(0.6, G.y * 0.25); shadowBlob.scale.set(sc, sc, sc); shadowBlob.material.opacity = 0.32 * sc; }

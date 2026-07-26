@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Subway Hood — Run the Underground. Earn from the Pool.</title>
-<meta name="description" content="Subway Hood is a Web3 cyberpunk endless runner. Connect your wallet, hold the token, climb the leaderboard and earn from the USDT prize pool. Free demo available."/>
-<link rel="icon" href="assets/logo.svg"/>
+<title>Subway Hood — Run the Streets. Earn from the Pool.</title>
+<meta name="description" content="Subway Hood is a Web3 3D street runner. Connect your wallet, hold $HOOD, climb the leaderboard and earn from the USDT prize pool. Free demo available."/>
+<link rel="icon" href="assets/token.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css"/>
 </head>
 <body>
@@ -17,8 +17,8 @@
 <nav class="nav">
   <div class="container inner">
     <a class="brand" href="index.html">
-      <img src="assets/logo.svg" alt="Subway Hood"/>
-      <b>SUBWAY HOOD</b>
+      <img src="assets/token.svg" alt="Subway Hood"/>
+      <b>Subway Hood</b>
     </a>
     <div class="links">
       <a href="#how">How it works</a>
@@ -33,9 +33,9 @@
 <header class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="badge-pill"><span class="dot"></span> Web3 · Cyberpunk Runner</span>
-      <h1>Run the<br>underground.<br><span class="grad">Earn the pool.</span></h1>
-      <p class="lead">Dash through neon tunnels in the rain. Dodge, jump, and grab the glow. Climb the leaderboard and claim your slice of the prize pool — or jump into the free demo, no token needed.</p>
+      <span class="badge-pill"><span class="dot"></span> Web3 · 3D Street Runner</span>
+      <h1>Run the <span class="grad">streets.</span><br>Earn the <span class="gold">pool.</span></h1>
+      <p class="lead">Sprint through the city, dodge the traffic, jump the crates and stack coins. Climb the leaderboard and claim your cut of the prize pool — or hit the free demo, no token needed.</p>
       <div class="cta">
         <a href="game.html" class="btn btn-primary">▶ Play Now</a>
         <a href="game.html?demo=1" class="btn btn-ghost">Try Demo</a>
@@ -47,8 +47,8 @@
       </div>
     </div>
     <div class="hero-art">
-      <div class="ring"></div>
-      <img src="assets/logo.svg" alt="Subway Hood emblem"/>
+      <div class="sun"></div>
+      <img src="assets/token.svg" alt="HOOD token"/>
     </div>
   </div>
 </header>
@@ -57,7 +57,7 @@
   <div class="pool">
     <p class="eyebrow">Prize Pool</p>
     <div class="amount" id="poolAmount">2,000 USDT</div>
-    <p>Shared across the <b id="poolSlots">5,000</b> highest scores on the leaderboard. Compete mode requires holding the <b id="poolToken">HOOD</b> token — your on-chain proof of entry.</p>
+    <p>Shared across the <b id="poolSlots">5,000</b> highest scores on the leaderboard. Compete mode requires holding <b id="poolToken">$HOOD</b> — your on-chain proof of entry.</p>
   </div>
 </section>
 
@@ -68,7 +68,7 @@
   <div class="cards">
     <div class="card"><span class="step-n">1</span><div class="ic">👛</div>
       <h3>Connect wallet</h3><p>Link your wallet so your profile, scores and rewards are tied to your address — not a username anyone can fake.</p></div>
-    <div class="card"><span class="step-n">2</span><div class="ic" style="padding:4px;overflow:hidden"><img src="assets/token.svg" alt="HOOD token" style="width:100%;height:100%;object-fit:contain"/></div>
+    <div class="card"><span class="step-n">2</span><div class="ic" style="padding:5px;overflow:hidden"><img src="assets/token.svg" alt="HOOD token" style="width:100%;height:100%;object-fit:contain"/></div>
       <h3>Hold $HOOD</h3><p>Hold at least <b id="howMin">1,000 HOOD</b> to unlock Compete mode and become eligible for the pool. No token yet? The demo is free.</p></div>
     <div class="card"><span class="step-n">3</span><div class="ic">🏆</div>
       <h3>Climb & earn</h3><p>Run, dodge, collect coins and push your best score. The top of the leaderboard splits the pool.</p></div>
@@ -88,7 +88,7 @@
 
 <footer>
   <div class="container inner">
-    <span>© 2026 Subway Hood — built for the underground.</span>
+    <span>© 2026 Subway Hood — run the streets.</span>
     <span>Demo build · Not financial advice · Play responsibly.</span>
   </div>
 </footer>
@@ -104,7 +104,7 @@
   set('statPool', C.prizePool); set('poolAmount', C.prizePool);
   set('statSlots', C.leaderboardSlots.toLocaleString());
   set('poolSlots', C.leaderboardSlots.toLocaleString());
-  set('poolToken', C.tokenSymbol);
+  set('poolToken', '$' + C.tokenSymbol);
   set('howMin', C.minHold.toLocaleString() + ' ' + C.tokenSymbol);
 
   const btn = document.getElementById('connectBtn');
