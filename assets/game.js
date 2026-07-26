@@ -160,13 +160,14 @@ function makeCharacter() {
   hips.position.y = 0.82; g.add(hips);
   const head = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.46, 0.44), mat(SKIN, 0.75));
   head.position.y = 1.99; g.add(head);
-  // hood sits at the BACK of the head (toward the camera); face points forward (-z, into the run)
-  const hood = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.5, 0.34), mat(HOOD, 0.85));
-  hood.position.set(0, 2.02, 0.16); g.add(hood);
-  const brim = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.14, 0.18), mat(HOOD, 0.85));
-  brim.position.set(0, 2.16, -0.2); g.add(brim);
+  // red cap (crown + front brim) — matches the token art; face points forward (-z)
+  const CAP = 0xe0402e;
+  const cap = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.24, 0.52), mat(CAP, 0.75));
+  cap.position.set(0, 2.32, 0); g.add(cap);
+  const capBrim = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 0.26), mat(CAP, 0.75));
+  capBrim.position.set(0, 2.23, -0.32); g.add(capBrim);
   // eyes on the front of the face
-  [-0.1, 0.1].forEach(ex => { const e = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.02), mat(0x201410, 0.5)); e.position.set(ex, 2.0, -0.23); g.add(e); });
+  [-0.1, 0.1].forEach(ex => { const e = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.09, 0.02), mat(0x1c130d, 0.5)); e.position.set(ex, 2.02, -0.23); g.add(e); });
 
   function limb(len, w, color, foot) {
     const grp = new THREE.Group();
