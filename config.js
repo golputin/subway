@@ -33,9 +33,8 @@ window.CONFIG = {
   minHold: 1000,
 
   // --- Leaderboard backend ---
-  // Leave "" to use local (browser) leaderboard for now (demo/simulation).
-  // Later: point to your API base, e.g. "https://api.subwayhood.xyz".
-  apiBase: "",
+  // Anti-cheat leaderboard API (Hermes-deployed VPS). "" = local/simulated store.
+  apiBase: "https://api.neoparty.web.id",
 
   // --- Links ---
   social: {
