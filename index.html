@@ -25,7 +25,7 @@
     <div class="links">
       <a href="#features">Features</a>
       <a href="#how">How it works</a>
-      <a href="#token">Token</a>
+      <a href="#token">Launch</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#roadmap">Roadmap</a>
     </div>
@@ -36,12 +36,12 @@
 <header class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="badge-pill"><span class="dot"></span> Web3 Subway Runner · Play · Earn · Own</span>
+      <span class="badge-pill"><span class="dot"></span> Launching on Pons · Robinhood Chain</span>
       <h1>Dodge the trains.<br><span class="gold">Earn the pool.</span> <span class="red">Own it.</span></h1>
-      <p class="lead">Sprint down the subway tracks, dodge oncoming trains, jump the crates and stack coins. Climb the global leaderboard and claim your cut of the <b>USDT prize pool</b>. No token? The demo is free.</p>
+      <p class="lead">Sprint down the subway tracks, dodge oncoming trains, jump the crates and stack coins. Climb the global leaderboard and claim your cut of the <b>USDT prize pool</b>. $HOOD fair-launches on the <b>Pons Launchpad</b> — no token? The demo is free.</p>
       <div class="cta">
         <a href="game.html" class="btn btn-primary">▶ Play Now</a>
-        <a href="game.html?demo=1" class="btn btn-ghost">Try Free Demo</a>
+        <a id="buyBtnHero" href="#token" class="btn btn-ghost">🚀 Buy $HOOD on Pons</a>
       </div>
       <div class="hero-stats">
         <div class="s"><b id="statPool">2,000 USDT</b><span>Prize pool</span></div>
@@ -86,21 +86,23 @@
 </section>
 
 <section id="token" class="container">
-  <p class="eyebrow reveal">$HOOD</p>
-  <h2 class="section-title reveal">Tokenomics</h2>
-  <p class="section-sub reveal">$HOOD powers entry, rewards and the prize pool. Sample allocation below — tune it to your plan.</p>
-  <div class="tok reveal">
-    <div class="donut-wrap">
-      <div class="donut"><div class="mid"><b id="tokSupply">100M</b><span>$HOOD supply</span></div></div>
+  <p class="eyebrow reveal">$HOOD · Fair Launch</p>
+  <h2 class="section-title reveal">Launching on Pons</h2>
+  <p class="section-sub reveal">$HOOD launches on the <b>Pons Launchpad</b> on <b>Robinhood Chain</b> — a fair-launch bonding curve. No presale, no team allocation: everyone buys on the same curve. Once it hits <b>graduation</b>, liquidity moves to a DEX and locks.</p>
+  <div class="g2 reveal" style="gap:28px">
+    <div class="grid" style="gap:14px">
+      <div class="card"><div class="ic">⚖️</div><h3>Fair launch</h3><p>100% of supply goes to the bonding curve. No insider allocation — you buy at the same curve as everyone else on Pons.</p></div>
+      <div class="card"><div class="ic">📈</div><h3>Bonding curve</h3><p>Price rises as people buy. Get in early on the curve, watch the market cap climb toward graduation.</p></div>
+      <div class="card"><div class="ic">🎓</div><h3>Graduation → DEX</h3><p>When the curve fills, $HOOD graduates: liquidity migrates to a DEX and locks, and Compete mode gating goes live.</p></div>
     </div>
-    <div class="legend">
-      <div class="li"><span class="sw" style="background:var(--gold)"></span><div><b>Prize Pool & Rewards</b><small>Funds the leaderboard payouts</small></div><span class="pct">40%</span></div>
-      <div class="li"><span class="sw" style="background:var(--red)"></span><div><b>Play & Earn Emissions</b><small>In-game earning over time</small></div><span class="pct">25%</span></div>
-      <div class="li"><span class="sw" style="background:var(--blue)"></span><div><b>Liquidity</b><small>DEX liquidity & listings</small></div><span class="pct">20%</span></div>
-      <div class="li"><span class="sw" style="background:#5a6472"></span><div><b>Team & Operations</b><small>Development & growth</small></div><span class="pct">15%</span></div>
+    <div class="card" style="display:flex;flex-direction:column;justify-content:center;text-align:center;padding:34px">
+      <img src="assets/badge.jpg" alt="$HOOD" style="width:120px;height:120px;border-radius:50%;margin:0 auto 16px;box-shadow:0 12px 30px rgba(0,0,0,.5)"/>
+      <div style="font-family:Anton;font-size:34px;letter-spacing:1px">$HOOD</div>
+      <div style="color:var(--muted);margin:4px 0 18px">on <b id="chainName">Robinhood Chain</b> · <span id="launchStatus" style="color:var(--gold2)">Coming soon</span></div>
+      <a id="buyBtn" href="#" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center">🚀 Buy on Pons Launchpad</a>
+      <p class="note" id="buyNote" style="margin-top:14px">Buy link goes live once the token is created on Pons. Set it in <code>config.js</code>.</p>
     </div>
   </div>
-  <p class="note">Allocation shown is a sample — set your real supply & split in your token contract and docs.</p>
 </section>
 
 <section class="container">
@@ -129,7 +131,7 @@
   <p class="section-sub reveal">From playable MVP to on-chain rewards.</p>
   <div class="road">
     <div class="phase done reveal"><div class="tag">Phase 1 ✓</div><h4>Launch</h4><ul><li>3D subway runner</li><li>Landing & branding</li><li>Wallet connect + demo</li></ul></div>
-    <div class="phase reveal"><div class="tag">Phase 2</div><h4>Token</h4><ul><li>$HOOD deploy</li><li>Token-gated compete</li><li>Liquidity & listing</li></ul></div>
+    <div class="phase reveal"><div class="tag">Phase 2</div><h4>Fair Launch</h4><ul><li>$HOOD on Pons Launchpad</li><li>Bonding curve → graduation</li><li>Token-gated compete live</li></ul></div>
     <div class="phase reveal"><div class="tag">Phase 3</div><h4>Backend</h4><ul><li>Persistent leaderboard</li><li>Anti-cheat validation</li><li>On-chain profiles</li></ul></div>
     <div class="phase reveal"><div class="tag">Phase 4</div><h4>Rewards</h4><ul><li>USDT pool payouts</li><li>Seasonal tournaments</li><li>Cosmetics & skins</li></ul></div>
   </div>
@@ -140,6 +142,8 @@
   <h2 class="section-title reveal">FAQ</h2>
   <div class="faq reveal">
     <details><summary>Do I need a token to play?</summary><p>No. Anyone can play the free <b>demo</b> instantly. Holding <b>$HOOD</b> unlocks <b>Compete</b> mode, which makes your scores eligible for the prize pool.</p></details>
+    <details><summary>Where can I buy $HOOD?</summary><p>$HOOD launches on the <b>Pons Launchpad</b> on <b>Robinhood Chain</b> as a fair-launch bonding curve. When it's live, the “Buy on Pons” button opens its token page. Early buyers get in on the curve before graduation.</p></details>
+    <details><summary>What is “graduation”?</summary><p>On Pons, a token trades on a bonding curve until it reaches a market-cap threshold. At that point it <b>graduates</b>: its liquidity moves to a DEX and locks, making it freely tradable. That's when Compete-mode token gating switches on.</p></details>
     <details><summary>How do payouts work?</summary><p>Compete scores are ranked on the leaderboard. Once the backend and treasury are live, the top slots share the USDT pool. Until then, this build is a playable MVP — scores are stored locally and are not yet a source of truth for real payouts.</p></details>
     <details><summary>Which wallets are supported?</summary><p>Any injected EVM wallet (MetaMask and compatible). Connect once and your address becomes your profile.</p></details>
     <details><summary>Is it heavy on my device?</summary><p>No — it's built with lightweight WebGL and runs in the browser on phones and laptops. No install required.</p></details>
@@ -195,6 +199,22 @@
   set('howMin', C.minHold.toLocaleString() + ' ' + C.tokenSymbol);
   const link = (id, u) => { const e = document.getElementById(id); if (e && u) e.href = u; };
   if (C.social) { link('soc-x', C.social.twitter); link('soc-tg', C.social.telegram); link('soc-docs', C.social.docs); }
+
+  // launchpad (Pons)
+  const lp = C.launchpad || {};
+  set('chainName', lp.chain || C.chainName);
+  set('launchStatus', lp.status || 'Coming soon');
+  const buy = document.getElementById('buyBtn');
+  const buyNote = document.getElementById('buyNote');
+  const heroBuy = document.getElementById('buyBtnHero');
+  if (lp.url) {
+    if (buy) buy.href = lp.url;
+    if (heroBuy) { heroBuy.href = lp.url; heroBuy.target = '_blank'; heroBuy.rel = 'noopener'; }
+    if (buyNote) buyNote.style.display = 'none';
+  } else if (buy) {
+    buy.removeAttribute('target'); buy.href = 'javascript:void(0)';
+    buy.style.opacity = '.65'; buy.style.cursor = 'not-allowed'; buy.textContent = '🚀 Buy on Pons — soon';
+  }
 
   // leaderboard
   (async () => {

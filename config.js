@@ -12,11 +12,20 @@ window.CONFIG = {
   prizePool: "2,000 USDT",
   leaderboardSlots: 5000,
 
+  // --- Launchpad (Pons) ---
+  // $HOOD launches on the Pons Launchpad (fair-launch bonding curve) on Robinhood Chain.
+  launchpad: {
+    platform: "Pons",
+    chain: "Robinhood Chain",
+    url: "",                 // your Pons token page once created, e.g. https://ponsfamily.com/launchpad/<token>
+    status: "Coming soon"    // "Coming soon" | "Live on curve" | "Graduated"
+  },
+
   // --- Token gating (Web3) ---
-  // Chain to require. 1 = Ethereum, 56 = BNB Chain, 137 = Polygon, etc.
-  chainId: 56,
-  chainName: "BNB Smart Chain",
-  // ERC-20 token address players must hold to compete. Leave "" until deployed.
+  // Set chainId to Robinhood Chain's id once confirmed. 0 = skip network check for now.
+  chainId: 0,
+  chainName: "Robinhood Chain",
+  // Token contract players must hold to compete. Fill in after the token graduates / is created.
   tokenAddress: "",
   tokenSymbol: "HOOD",
   tokenDecimals: 18,
